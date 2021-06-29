@@ -10,10 +10,21 @@
 # include <signal.h>
 # include <sys/wait.h>
 
+// ENUM TOKEN TYPES
+enum TokenType{
+	CHAR_PIPE = '|',
+	CHAR_LESS = '<',
+	CHAR_DLESS = '<<',
+	CHAR_GREAT = '>',
+	CHAR_DGREAT = '>>',
+	CHAR_WORD = 'W',
+};
+
+//change: we made type a char instead of a string
 typedef struct s_token
 {
 	char	*content;
-	char	*type;
+	int		type;
 	struct s_token *next;
 } t_token;
 

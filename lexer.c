@@ -11,10 +11,31 @@ t_token	*initialize(void)
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
+	new->next = NULL;
+	new->content = NULL;
 	return (new);
 }
 
-
+void	tokenize_special_char(char *str, t_token *new)
+{
+	//how to move within string so that in the lexer func it moves to the next char?
+	// and how to make the function go: this token is done go to the next token?
+	if (str[0] == '|'&& str[1] == ' ')
+		new->type = CHAR_PIPE;
+	else if (str[0] == '<' && str[1] == ' ')
+		new->type = CHAR_LESS;
+	else if (str[0] == '<' && str[1] == '<' && str[2] == ' ')
+		new->type = CHAR_DLESS;
+	else if (str[0] == '>' && str[1] == ' ')
+		new->type = CHAR_GREAT;
+	else if (str[0] == '>' && str[1] == '>' && str[2] == ' ')
+		new->type = CHAR_DGREAT;
+	else
+	{
+		printf("error in check_special\n");
+		return; //error?
+	}
+}
 
 void	lexer(char *str, t_token **token)
 {
@@ -24,35 +45,28 @@ void	lexer(char *str, t_token **token)
 	char	*temp;
 	int		n;
 
-
-	head = new;
-	while (*str != '\n')
+	head = initialize();
+	head->next = new;
+	while (*str != '\0')
 	{
-		n = 0;
 		//initialize new token
 		new = initialize();
 
-		//check function
-		if //check for special chars (| > >> etc.))
-
-		else //everything else except special
-				//check for quotes (keep the quote?)
-				//check for word
-
-		if (*str == '\'' || *str == '\"')
+		////check for special chars (| > >> etc.))
+		if (ft_strchr("|><", str[0]))
 		{
-			temp = str;
-			str++;
-			while (*str != '\'' || *str != '\"')
-			{
-				n++;
-				str++;
-			}
-			if (*str == '\'' || *str == '\"')
-				new->content = ft_substr(temp, 0, n + 1);
-			else
-				return ;
+			tokenize_special_char(str, new);
+			return ;
 		}
-		ft_lstadd_back((t_list **)&head, (t_list *)new);
+		else
+			return ;
+
+
+		//what about $ with environment vars?
+		// else //everything else except special
+		// 		//check for quotes (keep the quote?)
+		// 		//check for word
+
+		//ft_lstadd_back((t_list **)&head, (t_list *)new);
 	}
 }
