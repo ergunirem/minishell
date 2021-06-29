@@ -1,12 +1,8 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "minishell.h"
 
-/* compile gcc -Wall -Wextra -Werror -lreadline test_shell.c && ./a.out */
+/* added makefile and .h file to my version to compile easily */
+/* added add_history and exit logic */
+/* just to try dividing input by space and introduce basic tokenizer I used ft_split */
 
 static volatile sig_atomic_t	keep_running = 1;
 
@@ -16,24 +12,52 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
+void	print_tokens(char **tokens)
+{
+	int i = 0;
+	while(tokens[i])
+	{
+		printf("%s\n", tokens[i]);
+		i++;
+	}
+}
+
+void	free_tokens(char **tokens)
+{
+	int i = 0;
+	while(tokens[i])
+	{
+		free(tokens[i]);
+		i++;
+	}
+	free(tokens);
+}
+
 int	main(void)
 {
 	int		pid;
 	int		s_wait;
 	char	*line;
-	char	**array;
+	char	**tokens;
 
 	pid = fork();
-	if (pid < 0)
-		ft_error();//to add the error handling function
+	// if (pid < 0)
+	// 	ft_error();//to add the error handling function
 	if (pid == 0)
 	{
 		signal(SIGINT, inthandler);
 		while (keep_running)
 		{
-			line = readline("Minishell$");
-			if (line)
-				printf("%s\n", line);
+			line = readline("Minishell$ ");
+			if (ft_strlen(line) > 0)
+				add_history(line);
+			if (!ft_strncmp(line, "exit", 5))
+			{
+				free_tokens(tokens);
+				break;
+			}
+			tokens = ft_split(line, ' ');
+			print_tokens(tokens);
 			/*steps for main function
 			{
 				parsing(line, array);//to add parsing
