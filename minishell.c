@@ -12,33 +12,12 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
-void	print_tokens(char **tokens)
-{
-	int i = 0;
-	while(tokens[i])
-	{
-		printf("%s\n", tokens[i]);
-		i++;
-	}
-}
-
-void	free_tokens(char **tokens)
-{
-	int i = 0;
-	while(tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
-}
-
 int	main(void)
 {
 	int		pid;
 	int		s_wait;
 	char	*line;
-	char	**tokens;
+	t_token	*tokens;
 
 	pid = fork();
 	// if (pid < 0)
@@ -56,8 +35,7 @@ int	main(void)
 				free_tokens(tokens);
 				break;
 			}
-			tokens = ft_split(line, ' ');
-			print_tokens(tokens);
+			lexer(line, &tokens);
 			/*steps for main function
 			{
 				parsing(line, array);//to add parsing
