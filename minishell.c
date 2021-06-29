@@ -31,10 +31,7 @@ int	main(void)
 			if (ft_strlen(line) > 0)
 				add_history(line);
 			if (!ft_strncmp(line, "exit", 5))
-			{
-				free_tokens(tokens);
 				break;
-			}
 			lexer(line, &tokens);
 			/*steps for main function
 			{

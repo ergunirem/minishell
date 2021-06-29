@@ -14,7 +14,7 @@ typedef struct s_token
 {
 	char	*content;
 	char	*type;
-	t_token *next;
+	struct s_token *next;
 } t_token;
 
 void	lexer(char *str, t_token **token);
