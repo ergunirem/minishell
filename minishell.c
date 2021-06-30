@@ -12,6 +12,16 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
+// void	lst_print(t_token *list)
+// {
+// 	printf("in\n");
+// 	while (list)
+// 	{
+// 		printf("content is %s\n", list->content);
+// 		list = list->next;
+// 	}
+// }
+
 int	main(void)
 {
 	int		pid;
@@ -32,7 +42,11 @@ int	main(void)
 				add_history(line);
 			if (!ft_strncmp(line, "exit", 5))
 				break;
+			printf("checkaa\n");
 			lexer(line, &tokens);
+			printf("checkaa\n");
+			// lst_print(tokens);
+			printf("checkaaaaa\n");
 			/*steps for main function
 			{
 				parsing(line, array);//to add parsing
