@@ -2,6 +2,21 @@
 #include "minishell.h"
 
 // throw error with unclosed quote
+//
+
+t_token	*initialize(void)
+{
+	t_token *new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->next = NULL;
+	new->content = NULL;
+	new->type = 0;
+	return (new);
+}
+
 t_token	*ft_listlast(t_token *lst)
 {
 	if (lst == NULL)
@@ -28,28 +43,46 @@ void	ft_listadd_back(t_token **lst, t_token *new)
 	}
 }
 
-void	ft_lst_print(t_token *token)
+int	tokenize_quote_word(char *str, t_token *new, int *i)
 {
-	int i = 1;
-	while(token)
+	char	c;
+	int		n;
+	int		start;
+
+	c = str[*i];
+	n = 0;
+	start = *i;
+	*i = *i + 1;
+	printf("i is %d\n", *i);
+	while (str[*i] != c && str[*i] != '\0')
 	{
-		printf("%d) content:%s and type:%d\n", i, token->content, token->type);
-		i++;
-		token = token->next;
+		n++;
+		(*i)++;
 	}
+	if (str[*i] == c)
+	{
+		new->content = ft_substr(str, start, n + 2);
+		new->type = CHAR_WORD;
+	}
+	else
+		return (-1);
+	return (0);
 }
 
-t_token	*initialize(void)
+void	tokenize_word(char *str, t_token *new, int *i)
 {
-	t_token *new;
+	int	start;
+	int	n;
 
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->next = NULL;
-	new->content = NULL;
-	new->type = 0;
-	return (new);
+	start = *i;
+	n = 0;
+	while (str[*i] != ' ' && str[*i] != '\0')
+	{
+		n++;
+		(*i)++;
+	}
+	new->content = ft_substr(str, start, n);
+	new->type = CHAR_WORD;
 }
 
 int	tokenize_special_char(char *str, t_token *new, int *i)
@@ -86,9 +119,9 @@ int	tokenize_special_char(char *str, t_token *new, int *i)
 	{
 		//problem: always goes into this condition when end of the line
 		printf("error in check_special\n");
-		return (-1); //error?
+		return (-1);
 	}
-	printf("new added is %s and type is %d\n", new->content, new->type);
+	// printf("new added is %s and type is %d\n", new->content, new->type);
 	return (0);
 }
 
@@ -96,33 +129,31 @@ void	lexer(char *str, t_token **token)
 {
 	t_token	**head;
 	t_token	*new;
-	char	*temp;
-	int		n;
 	int		i;
 
 	*head = NULL;
 	i = 0;
-	while (str[i] != '\0')
+	while (str[i] != '\0')//would it be possible to not have it end with \n
 	{
-		//initialize new token
 		new = initialize();
-		//skip whitespace
+		printf("check\n");
 		while (ft_iswhitespace(str[i]))
 			i++;
-		//check for special chars
 		if (ft_strchr("|><", str[i]))
 		{
 			if(tokenize_special_char(str, new, &i) == -1)
 				return ;
 		}
+		else if (str[i] == '\'' || str[i] == '\"')
+		{
+			if (tokenize_quote_word(str, new, &i) == -1)
+				return ;
+		}
 		else
-			return ;
+			tokenize_word(str, new, &i);
+		printf("new is %s %c\n", new->content, new->type);
 		ft_listadd_back(head, new);
-				// //what about $ with environment vars?
-		// // else //everything else except special
-		// // 		//check for quotes (keep the quote?)
-		// // 		//check for word
 	}
 	token = head;
-	ft_lst_print(*token);
+	lst_print(*token);
 }

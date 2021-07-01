@@ -10,6 +10,13 @@
 # include <signal.h>
 # include <sys/wait.h>
 
+typedef struct s_token
+{
+	char	*content;
+	int		type;
+	struct s_token *next;
+} t_token;
+
 // ENUM TOKEN TYPES
 enum TokenType{
 	CHAR_PIPE = '|',
@@ -20,14 +27,7 @@ enum TokenType{
 	CHAR_WORD = 'W',
 };
 
-//change: we made type a char instead of a string
-typedef struct s_token
-{
-	char	*content;
-	int		type;
-	struct s_token *next;
-} t_token;
-
 void	lexer(char *str, t_token **token);
+void	lst_print(t_token *list);
 
 #endif

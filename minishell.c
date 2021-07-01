@@ -12,15 +12,14 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
-// void	lst_print(t_token *list)
-// {
-// 	printf("in\n");
-// 	while (list)
-// 	{
-// 		printf("content is %s\n", list->content);
-// 		list = list->next;
-// 	}
-// }
+void	lst_print(t_token *list)
+{
+	while (list)
+	{
+		printf("content:%s type:%d\n", list->content, list->type);
+		list = list->next;
+	}
+}
 
 int	main(void)
 {
@@ -45,7 +44,7 @@ int	main(void)
 			printf("checkaa\n");
 			lexer(line, &tokens);
 			printf("checkaa\n");
-			// lst_print(tokens);
+			lst_print(tokens);
 			printf("checkaaaaa\n");
 			/*steps for main function
 			{

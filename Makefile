@@ -13,8 +13,8 @@ NAME	= minishell
 
 GCC		= gcc
 
-# -fsanitize=address -g
-FLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+# FLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+FLAGS	= -Wall -Wextra -Werror
 
 HEADER_FILE = minishell.h
 
