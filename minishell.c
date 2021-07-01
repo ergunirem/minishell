@@ -16,7 +16,7 @@ void	lst_print(t_token *list)
 {
 	while (list)
 	{
-		printf("content:%s type:%d\n", list->content, list->type);
+		printf("content:%s type:%c\n", list->content, list->type);
 		list = list->next;
 	}
 }

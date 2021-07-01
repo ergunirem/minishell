@@ -63,6 +63,7 @@ int	tokenize_quote_word(char *str, t_token *new, int *i)
 	{
 		new->content = ft_substr(str, start, n + 2);
 		new->type = CHAR_WORD;
+		*i = *i + 1;
 	}
 	else
 		return (-1);
@@ -83,6 +84,8 @@ void	tokenize_word(char *str, t_token *new, int *i)
 	}
 	new->content = ft_substr(str, start, n);
 	new->type = CHAR_WORD;
+	if(str[*i] != '\0')
+		*i = *i + 1;
 }
 
 int	tokenize_special_char(char *str, t_token *new, int *i)
@@ -90,27 +93,27 @@ int	tokenize_special_char(char *str, t_token *new, int *i)
 	// how to move within string so that in the lexer func it moves to the next char?
 	// and how to make the function go: this token is done go to the next token?
 	//is checking for a space after special char necessary?
-	if (str[*i] == '|' && str[*i + 1] == ' ') // ?
+	if (str[*i] == '|') // ?
 	{
 		new->type = CHAR_PIPE;
 		(*i)++;
 	}
-	else if (str[*i] == '<' && str[*i + 1] == '<' && str[*i + 2] == ' ')
+	else if (str[*i] == '<' && str[*i + 1] == '<')
 	{
 		new->type = CHAR_DLESS;
 		(*i) = (*i) + 2;
 	}
-	else if (str[*i] == '<' && str[*i + 1] == ' ')
+	else if (str[*i] == '<')
 	{
 		new->type = CHAR_LESS;
 		(*i)++;
 	}
-	else if (str[*i] == '>' && str[*i + 1] == '>' && str[*i + 2] == ' ')
+	else if (str[*i] == '>' && str[*i + 1] == '>')
 	{
 		new->type = CHAR_DGREAT;
 		(*i) = (*i) + 2;
 	}
-	else if (str[*i] == '>' && str[*i + 1] == ' ')
+	else if (str[*i] == '>')
 	{
 		new->type = CHAR_GREAT;
 		(*i)++;
@@ -153,6 +156,7 @@ void	lexer(char *str, t_token **token)
 			tokenize_word(str, new, &i);
 		printf("new is %s %c\n", new->content, new->type);
 		ft_listadd_back(head, new);
+
 	}
 	token = head;
 	lst_print(*token);

@@ -12,18 +12,18 @@
 
 typedef struct s_token
 {
-	char	*content;
-	int		type;
-	struct s_token *next;
+	char			*content;
+	char			type;
+	struct s_token	*next;
 } t_token;
 
 // ENUM TOKEN TYPES
 enum TokenType{
-	CHAR_PIPE = '|',
-	CHAR_LESS = '<',
-	CHAR_DLESS = '<<',
-	CHAR_GREAT = '>',
-	CHAR_DGREAT = '>>',
+	CHAR_PIPE = 'P',
+	CHAR_LESS = 'L',
+	CHAR_DLESS = 'D',
+	CHAR_GREAT = 'G',
+	CHAR_DGREAT = 'H',
 	CHAR_WORD = 'W',
 };
 
