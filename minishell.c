@@ -12,25 +12,13 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
-void	print_tokens(char **tokens)
+void	lst_print(t_token *list)
 {
-	int i = 0;
-	while(tokens[i])
+	while (list)
 	{
-		printf("%s\n", tokens[i]);
-		i++;
+		printf("content:%s type:%d\n", list->content, list->type);
+		list = list->next;
 	}
-}
-
-void	free_tokens(char **tokens)
-{
-	int i = 0;
-	while(tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
 }
 
 int	main(void)
@@ -38,7 +26,7 @@ int	main(void)
 	int		pid;
 	int		s_wait;
 	char	*line;
-	char	**tokens;
+	t_token	*tokens;
 
 	pid = fork();
 	// if (pid < 0)
@@ -52,12 +40,12 @@ int	main(void)
 			if (ft_strlen(line) > 0)
 				add_history(line);
 			if (!ft_strncmp(line, "exit", 5))
-			{
-				free_tokens(tokens);
 				break;
-			}
-			tokens = ft_split(line, ' ');
-			print_tokens(tokens);
+			printf("checkaa\n");
+			lexer(line, &tokens);
+			printf("checkaa\n");
+			lst_print(tokens);
+			printf("checkaaaaa\n");
 			/*steps for main function
 			{
 				parsing(line, array);//to add parsing
