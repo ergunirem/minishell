@@ -6,7 +6,7 @@
 
 t_token	*initialize(void)
 {
-	t_token *new;
+	t_token	*new;
 
 	new = malloc(sizeof(t_token));
 	if (!new)
@@ -28,7 +28,7 @@ t_token	*ft_listlast(t_token *lst)
 
 void	ft_listadd_back(t_token **lst, t_token *new)
 {
-	t_token *last;
+	t_token	*last;
 
 	if (new && *lst)
 	{
@@ -41,33 +41,6 @@ void	ft_listadd_back(t_token **lst, t_token *new)
 		*lst = new;
 		new->next = NULL;
 	}
-}
-
-int	tokenize_quote_word(char *str, t_token *new, int *i)
-{
-	char	c;
-	int		n;
-	int		start;
-
-	c = str[*i];
-	n = 0;
-	start = *i;
-	*i = *i + 1;
-	printf("i is %d\n", *i);
-	while (str[*i] != c && str[*i] != '\0')
-	{
-		n++;
-		(*i)++;
-	}
-	if (str[*i] == c)
-	{
-		new->content = ft_substr(str, start, n + 2);
-		new->type = CHAR_WORD;
-		*i = *i + 1;
-	}
-	else
-		return (-1);
-	return (0);
 }
 
 void	tokenize_word(char *str, t_token *new, int *i)
@@ -84,8 +57,37 @@ void	tokenize_word(char *str, t_token *new, int *i)
 	}
 	new->content = ft_substr(str, start, n);
 	new->type = CHAR_WORD;
-	if(str[*i] != '\0')
+	if (str[*i] != '\0')
 		*i = *i + 1;
+}
+
+int	tokenize_quote_word(char *str, t_token *new, int *i)
+{
+	char	c;
+	int		start;
+
+	c = str[*i];
+	start = *i;
+	*i = *i + 1;
+	while (str[*i] != c && str[*i] != '\0')
+		(*i)++;
+	if (str[*i] == c)
+	{
+		if (str[*i + 1] != '\0' && str[*i + 1] != ' ')
+		{
+			tokenize_word(str, new, &start);
+			*i = start;
+		}
+		else
+		{
+			new->content = ft_substr(str, start, *i - start + 1);
+			new->type = CHAR_WORD;
+			*i = *i + 1;
+		}
+	}
+	else
+		return (-1);
+	return (0);
 }
 
 int	tokenize_special_char(char *str, t_token *new, int *i)
@@ -139,12 +141,11 @@ void	lexer(char *str, t_token **token)
 	while (str[i] != '\0')//would it be possible to not have it end with \n
 	{
 		new = initialize();
-		printf("check\n");
 		while (ft_iswhitespace(str[i]))
 			i++;
 		if (ft_strchr("|><", str[i]))
 		{
-			if(tokenize_special_char(str, new, &i) == -1)
+			if (tokenize_special_char(str, new, &i) == -1)
 				return ;
 		}
 		else if (str[i] == '\'' || str[i] == '\"')
@@ -154,9 +155,7 @@ void	lexer(char *str, t_token **token)
 		}
 		else
 			tokenize_word(str, new, &i);
-		printf("new is %s %c\n", new->content, new->type);
 		ft_listadd_back(head, new);
-
 	}
 	token = head;
 	lst_print(*token);
