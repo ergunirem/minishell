@@ -15,10 +15,24 @@ typedef struct s_token
 	char			*content;
 	char			type;
 	struct s_token	*next;
-} t_token;
+}	t_token;
 
-// ENUM TOKEN TYPES
-enum TokenType{
+typedef struct s_ASTtree
+{
+	int					type;
+	char				*content;
+	struct s_ASTtree	*left;
+	struct s_ASTtree	*right;
+}	t_ASTtree;
+
+// ENUM tree elements
+enum e_TreeElement{
+	CMD_LINE = 1,
+	JOB = 2,
+	WORD = 3,
+};
+// ENUM token type
+enum e_TokenType{
 	CHAR_PIPE = 'P',
 	CHAR_LESS = 'L',
 	CHAR_DLESS = 'D',
