@@ -30,6 +30,7 @@ enum e_TreeElement{
 	CMD_LINE = 1,
 	JOB = 2,
 	WORD = 3,
+	PIPE = 4,
 };
 // ENUM token type
 enum e_TokenType{
@@ -43,5 +44,7 @@ enum e_TokenType{
 
 void	lexer(char *str, t_token **token);
 void	lst_print(t_token *list);
+void	parser(t_token *tokens, t_ASTtree **tree);
+void	print_tree(t_ASTtree *tree);
 
 #endif

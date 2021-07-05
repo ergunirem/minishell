@@ -27,6 +27,7 @@ int	main(void)
 	int		s_wait;
 	char	*line;
 	t_token	*tokens;
+	// t_ASTtree *tree;
 
 	pid = fork();
 	// if (pid < 0)
@@ -46,6 +47,8 @@ int	main(void)
 			printf("checkaa\n");
 			lst_print(tokens);
 			printf("checkaaaaa\n");
+			// parser(tokens, &tree);
+			// print_tree(tree);
 			/*steps for main function
 			{
 				parsing(line, array);//to add parsing

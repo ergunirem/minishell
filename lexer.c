@@ -135,6 +135,7 @@ void	lexer(char *str, t_token **token)
 	t_token	**head;
 	t_token	*new;
 	int		i;
+	t_ASTtree *tree_x;
 
 	*head = NULL;
 	i = 0;
@@ -159,4 +160,6 @@ void	lexer(char *str, t_token **token)
 	}
 	token = head;
 	lst_print(*token);
+	parser(*token, &tree_x);
+	print_tree(tree_x);
 }

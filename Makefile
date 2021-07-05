@@ -6,6 +6,8 @@ YELLOW = \033[1;33m
 
 SRCS	= minishell.c \
 			lexer.c \
+			parsing.c \
+			print_tree.c \
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -13,8 +15,8 @@ NAME	= minishell
 
 GCC		= gcc
 
-# FLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+# FLAGS	= -Wall -Wextra -Werror
 
 HEADER_FILE = minishell.h
 
