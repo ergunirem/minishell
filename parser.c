@@ -28,7 +28,8 @@ t_token	*sublist_until_pipe(t_token **tokens)
 	//change the head of the list to the next token after pipe
 	while((*tokens))
 	{
-		if((*tokens)->type == CHAR_PIPE)
+		//when there is no pipe?
+		if((*tokens)->type == CHAR_PIPE || (*tokens)->next == NULL)
 		{
 			(*tokens) = (*tokens)->next;
 			break ;
