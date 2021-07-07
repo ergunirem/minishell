@@ -1,9 +1,5 @@
 #include "minishell.h"
 
-/* added makefile and .h file to my version to compile easily */
-/* added add_history and exit logic */
-/* just to try dividing input by space and introduce basic tokenizer I used ft_split */
-
 static volatile sig_atomic_t	keep_running = 1;
 
 void	inthandler(int _)
@@ -12,22 +8,13 @@ void	inthandler(int _)
 	keep_running = 0;
 }
 
-void	lst_print(t_token *list)
-{
-	while (list)
-	{
-		printf("content:%s type:%c\n", list->content, list->type);
-		list = list->next;
-	}
-}
-
 int	main(void)
 {
-	int		pid;
-	int		s_wait;
-	char	*line;
-	t_token	*tokens;
-	// t_ASTtree *tree;
+	int			pid;
+	int			s_wait;
+	char		*line;
+	t_token		*tokens;
+	t_tree_node	*root;
 
 	pid = fork();
 	// if (pid < 0)
@@ -42,20 +29,10 @@ int	main(void)
 				add_history(line);
 			if (!ft_strncmp(line, "exit", 5))
 				break;
-			printf("checkaa\n");
 			lexer(line, &tokens);
-			printf("checkaa\n");
 			lst_print(tokens);
-			printf("checkaaaaa\n");
-			// parser(tokens, &tree);
-			// print_tree(tree);
-			/*steps for main function
-			{
-				parsing(line, array);//to add parsing
-				check_input(array);//to add check input
-				command_handle(array);//to handle different commands
-			}
-			*/
+			root = parser(&tokens);
+			print_tree(root);
 		}
 	}
 	else
