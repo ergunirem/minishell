@@ -1,36 +1,77 @@
 #include "minishell.h"
-#define COUNT 10
 
-//Rerefence: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+# define GREEN "\033[38;5;2m"
+# define RESET "\033[38;5;255m"
+# define RED "\033[38;5;1m"
+# define BLUE "\033[38;5;4m"
+# define PURPLE "\033[0;35m"
+# define YELLOW "\033[0;33m"
 
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
-void print2DUtil(t_ASTtree *tree, int space)
+/*  Input String: < infile cat -e | wc | cat -e > outfile
+
+**	Expected Tree Output:
+	PIPE(
+		CMD ( [<] [infile] [cat] [-e] )
+		PIPE (
+			CMD ( [wc] )
+			CMD ( [cat] [-e] [>] [outfile] )
+		)
+	)
+*/
+void	indent(size_t spaces)
 {
-    // Base case
-    if (tree == NULL)
-        return;
-
-    // Increase distance between levels
-    space += COUNT;
-
-    // Process right child first
-    print2DUtil(tree->right, space);
-
-    // Print current node after space
-    // count
-    printf("\n");
-    for (int i = COUNT; i < space; i++)
-        printf(" ");
-    printf("t:%d c:%s\n", tree->type, tree->content);
-
-    // Process left child
-    print2DUtil(tree->left, space);
+	for(size_t i = 0; i < spaces; i++)
+	{
+		putchar(' ');
+	}
 }
 
-// Wrapper over print2DUtil()
-void print_tree(t_ASTtree *tree)
+void	print_pipeline(t_pipe_node pipe, size_t spaces)
 {
-   // Pass initial space count as 0
-   print2DUtil(tree, 0);
+	printf("%sPIPE (\n%s", RED, RESET);
+	//nodes of the pipe (where recursion happens)
+	visit_tree(pipe.left, spaces + 2);
+	visit_tree(pipe.right, spaces + 2);
+	indent(spaces);
+	printf("%s)\n%s", RED, RESET);
+}
+
+void	print_command(t_cmd_node cmd)
+{
+	t_token	*token;
+
+	token = cmd.tokens;
+	printf("%sCMD ( %s", GREEN, RESET);
+	while (token)
+	{
+		if(token->type == CHAR_WORD)
+			printf("%s[%s] ", BLUE, token->content);
+		else
+			printf("%s[%c] ", BLUE, token->type);
+		token = token->next;
+	}
+	// printf("%s %s", token->content, RESET);
+	printf("%s)\n%s", GREEN, RESET);
+}
+
+
+
+void	visit_tree(const t_tree_node *tree, size_t spaces)
+{
+	indent(spaces);
+	if(tree->type == PIPE_NODE)
+	{
+		print_pipeline(tree->data.pipe, spaces);
+	}
+	else if (tree->type == CMD_NODE)
+	{
+		print_command(tree->data.cmd);
+	}
+}
+
+void	print_tree(const t_tree_node *tree)
+{
+	printf("%s=============  ASTree =============%s\n\n", YELLOW, RESET);
+	visit_tree(tree, 0);
+	printf("\n%s===================================%s\n", YELLOW, RESET);
 }
