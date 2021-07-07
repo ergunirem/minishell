@@ -4,7 +4,7 @@
 int	peak_ahead(t_token *tokens)
 {
 	if (!tokens)
-		return (-1)
+		return (-1);
 	while (tokens)
 	{
 		if (tokens->type == CHAR_PIPE)
@@ -16,20 +16,17 @@ int	peak_ahead(t_token *tokens)
 
 t_token	*sublist_until_pipe(t_token **tokens)
 {
-	t_token	*new_sublist_head;
-	t_token	*new_sublist;
+	t_token	*sublist_head;
+	t_token	*sublist;
 	int		count;
 
-	new_sublist = (*tokens);
-	new_sublist_head = (*tokens);
-	// lst_print(tokens);
+	sublist = (*tokens);
 	count = 0;
 	//count token number until pipe for sublist and
 	//change the head of the list to the next token after pipe
 	while((*tokens))
 	{
-		//when there is no pipe?
-		if((*tokens)->type == CHAR_PIPE || (*tokens)->next == NULL)
+		if((*tokens)->type == CHAR_PIPE)
 		{
 			(*tokens) = (*tokens)->next;
 			break ;
@@ -37,19 +34,19 @@ t_token	*sublist_until_pipe(t_token **tokens)
 		count++;
 		(*tokens) = (*tokens)->next;
 	}
-	while(new_sublist)
+	sublist_head = sublist;
+	while(sublist)
 	{
-		if(count == 0)
-		{
-			new_sublist->next = NULL;
-			return (new_sublist_head);
-		}
 		count--;
-		new_sublist = new_sublist->next;
+		if(count == 0)
+			break ;
+		sublist = sublist->next;
 	}
+    sublist->next = NULL;
+	return (sublist_head);
 }
 
-t_tree_node	*parse_command(t_token *tokens)
+t_tree_node	*parse_command(t_token **tokens)
 {
 	t_tree_node	*new_node;
 
@@ -57,7 +54,7 @@ t_tree_node	*parse_command(t_token *tokens)
 	if (!new_node)
 		return (NULL);
 	new_node->type = CMD_NODE;
-	new_node->data.cmd.tokens = sublist_until_pipe(&tokens);
+	new_node->data.cmd.tokens = sublist_until_pipe(tokens);
 	return (new_node);
 }
 
@@ -75,30 +72,29 @@ t_tree_node *create_pipe_node(t_tree_node *left, t_tree_node *right)
 	return (new_node);
 }
 
-t_tree_node	*parse_pipe(t_token *tokens)
+t_tree_node	*parse_pipe(t_token **tokens)
 {
 	t_tree_node	*left;
 	t_tree_node	*right;
 	int			peek;
-
 	left = parse_command(tokens); //change the head of the list to the next token after pipe
-	peek = peak_ahead(tokens);
-	if (peek == PIPE)
+	peek = peak_ahead(*tokens);
+	if (peek == PIPE_NODE)
 		right = parse_pipe(tokens);
 	else //do I need error?
 		right = parse_command(tokens);
 	return(create_pipe_node(left, right));
 }
 
-t_tree_node	*parser(t_token *tokens)
+t_tree_node	*parser(t_token **tokens)
 {
 	int	peek;
 
-	peek = peak_ahead(tokens);
+	peek = peak_ahead(*tokens);
 	if (peek == 2)
-		return (parse_pipe());
+		return (parse_pipe(tokens));
 	else if (peek == 1)
-		return (parse_command());
-	// else
-	// 	return (error_node());
+		return (parse_command(tokens));
+	else
+		return (NULL); //error_node()
 }
