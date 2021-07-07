@@ -132,12 +132,10 @@ int	tokenize_special_char(char *str, t_token *new, int *i)
 
 void	lexer(char *str, t_token **token)
 {
-	t_token		**head;
 	t_token		*new;
 	int			i;
-	t_tree_node	*root;
 
-	*head = NULL;
+	*token = NULL;
 	i = 0;
 	while (str[i] != '\0')//would it be possible to not have it end with \n
 	{
@@ -156,10 +154,6 @@ void	lexer(char *str, t_token **token)
 		}
 		else
 			tokenize_word(str, new, &i);
-		ft_listadd_back(head, new);
+		ft_listadd_back(token, new);
 	}
-	token = head;
-	lst_print(*token);
-	root = parser(*token);
-	// print_tree(root);
 }
