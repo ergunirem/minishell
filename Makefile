@@ -6,7 +6,7 @@ YELLOW = \033[1;33m
 
 SRCS	= minishell.c \
 			lexer.c \
-			parsing.c \
+			parser.c \
 			print_tree.c \
 
 OBJS	= $(SRCS:.c=.o)
