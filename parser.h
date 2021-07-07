@@ -1,8 +1,8 @@
 #ifndef PARSER_H
 # define PARSER_H
-# include "minishell.h"
+# include "token.h"
 
-/* Grammar > produciton rules
+/* Grammar > production rules
 ** TREE_NODE	:: = CMD_NODE OR PIPE_NODE
 ** CMD_NODE		:: = LIST OF TOKENS
 ** PIPE_NODE	:: = TREE_NODE (LEFT=ALWAYS CMD) AND TREE_NODE (RIGHT=PIPE OR CMD)
@@ -25,7 +25,6 @@
 																											token (content="outfile")
 */
 
-// ENUM tree node types
 typedef enum e_node_type{
 	CMD_NODE = 1,
 	PIPE_NODE = 2,
@@ -54,6 +53,8 @@ typedef struct s_tree_node
 	t_node_value	data;
 } t_tree_node;
 
-t_tree_node	*parser(t_token *tokens);
+t_tree_node	*parser(t_token **tokens);
+void	print_tree(const t_tree_node *tree);
+void	visit_tree(const t_tree_node *tree, size_t spaces);
 
 #endif
