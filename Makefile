@@ -8,6 +8,7 @@ SRCS	= minishell.c \
 			lexer.c \
 			parser.c \
 			print_tree.c \
+			print_token.c \
 
 OBJS	= $(SRCS:.c=.o)
 
