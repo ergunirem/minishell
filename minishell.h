@@ -11,9 +11,13 @@
 # include <sys/wait.h>
 # include "token.h"
 # include "parser.h"
+# include "error.h"
 
+typedef enum { FALSE, TRUE } bool;
 
 void	lst_print(t_token *list);
+bool	check_list(t_token *tokens);
+bool	error_msg(char *msg);
 // void	print_tree(t_ASTtree *tree);
 
 #endif

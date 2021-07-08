@@ -31,8 +31,11 @@ int	main(void)
 				break;
 			lexer(line, &tokens);
 			lst_print(tokens);
-			root = parser(&tokens);
-			print_tree(root);
+			if(check_list(tokens))
+			{
+				root = parser(&tokens);
+				print_tree(root);
+			}
 		}
 	}
 	else
