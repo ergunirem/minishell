@@ -9,6 +9,8 @@ SRCS	= minishell.c \
 			parser.c \
 			print_tree.c \
 			print_token.c \
+			check.c \
+			error.c \
 
 OBJS	= $(SRCS:.c=.o)
 
