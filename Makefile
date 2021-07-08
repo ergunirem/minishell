@@ -11,6 +11,7 @@ SRCS	= minishell.c \
 			print_token.c \
 			check.c \
 			error.c \
+			free.c \
 
 OBJS	= $(SRCS:.c=.o)
 

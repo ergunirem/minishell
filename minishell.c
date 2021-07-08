@@ -35,7 +35,9 @@ int	main(void)
 			{
 				root = parser(&tokens);
 				print_tree(root);
+				free_tree(root);
 			}
+			free_tokens(&tokens);
 		}
 	}
 	else
