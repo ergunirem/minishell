@@ -9,39 +9,17 @@
 # include <stdio.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include "token.h"
+# include "parser.h"
+# include "error.h"
 
-typedef struct s_token
-{
-	char			*content;
-	char			type;
-	struct s_token	*next;
-}	t_token;
+typedef enum { FALSE, TRUE } bool;
 
-typedef struct s_ASTtree
-{
-	int					type;
-	char				*content;
-	struct s_ASTtree	*left;
-	struct s_ASTtree	*right;
-}	t_ASTtree;
-
-// ENUM tree elements
-enum e_TreeElement{
-	CMD_LINE = 1,
-	JOB = 2,
-	WORD = 3,
-};
-// ENUM token type
-enum e_TokenType{
-	CHAR_PIPE = 'P',
-	CHAR_LESS = 'L',
-	CHAR_DLESS = 'D',
-	CHAR_GREAT = 'G',
-	CHAR_DGREAT = 'H',
-	CHAR_WORD = 'W',
-};
-
-void	lexer(char *str, t_token **token);
 void	lst_print(t_token *list);
+bool	check_list(t_token *tokens);
+bool	error_msg(char *msg);
+void	free_tokens(t_token **tokens);
+void	free_tree(t_tree_node *tree);
+// void	print_tree(t_ASTtree *tree);
 
 #endif
