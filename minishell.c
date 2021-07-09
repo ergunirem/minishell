@@ -43,6 +43,7 @@ int	main(void)
 	else
 	{
 		wait(&s_wait);
+		// system("leaks minishell");
 		return (0);
 	}
 }
