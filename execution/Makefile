@@ -13,7 +13,9 @@ SRCS	= minishell.c \
 			error.c \
 			free.c \
 			exec_existing_prog.c\
-			exec.c
+			exec.c \
+			built_in/built_in.c \
+			built_in/cd_pwd.c
 
 OBJS	= $(SRCS:.c=.o)
 

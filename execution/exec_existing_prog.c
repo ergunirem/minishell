@@ -50,9 +50,6 @@ int	execute_program(char **argument, char **envp)
 	return (0);
 }
 
-
-
-
 // void	redirection(char *redirect_in, char *redirect_out)
 // {
 // 	int	redirect_out_fd;

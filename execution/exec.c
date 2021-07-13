@@ -50,6 +50,12 @@ int	execution(t_token *token, int nb, char **envp)
 		nb++;
 		token = token->next;
 	}
+	//put built-in logic here.
+	if(is_built_in(argument[0]))
+	{
+		printf("BUILT_IN\n");
+		return(exec_built_in(argument, nb));
+	}
 	if (fork() == 0)
 	{
 		if (execute_program(argument, envp) == -1)

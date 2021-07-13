@@ -12,8 +12,10 @@
 # include "token.h"
 # include "parser.h"
 # include "error.h"
+# include "built_in/built_in.h"
+# include <stdbool.h>
 
-typedef enum { FALSE, TRUE } bool;
+// typedef enum { FALSE, TRUE } bool;
 
 void	lst_print(t_token *list);
 bool	check_list(t_token *tokens);
@@ -23,7 +25,6 @@ void	free_tree(t_tree_node *tree);
 void	free_array(char **array);
 int		execution(t_token *token, int nb, char **envp);
 void	execute_tree(t_tree_node *tree, char **envp);
-int	execute_program(char **argument, char **envp);
-// void	print_tree(t_ASTtree *tree);
+int		execute_program(char **argument, char **envp);
 
 #endif
