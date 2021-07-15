@@ -28,9 +28,9 @@ int	main(int argc, char **argv, char **envp)
 		if(check_list(tokens))
 		{
 			root = parser(&tokens);
-			init_env_vars(envp);
+			init_variables(envp);
 			// execution(root->data.cmd.tokens, envp);
-			// execute_tree(root, envp);
+			execute_tree(root, envp);
 			print_tree(root);
 			free_tree(root);
 		}

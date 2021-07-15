@@ -33,7 +33,7 @@ void	print_pipeline(t_pipe_node pipe, size_t spaces)
 	visit_tree(pipe.left, spaces + 2);
 	visit_tree(pipe.right, spaces + 2);
 	indent(spaces);
-	printf("	)\n%s", RED, RESET);
+	printf("%s)\n%s", RED, RESET);
 }
 
 void	print_command(t_cmd_node cmd)

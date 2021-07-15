@@ -2,14 +2,19 @@
 
 t_env	g_env;
 
-void	set_key_value_pair(char *env_var, t_pair_lst *new)
+t_pair_lst	*create_key_value_pair(char *env_var)
 {
-	int	i;
+	int i;
+	t_pair_lst *new;
 
+	new = malloc(sizeof(t_pair_lst));
+	if (!new)
+		return (NULL); //error malloc
+	new->next = NULL;
 	i = 0;
 	while (env_var[i])
 	{
-		if(env_var[i] == '=')
+		if (env_var[i] == '=')
 		{
 			new->key = ft_substr(env_var, 0, i);
 			new->value = ft_substr(env_var, i + 1, ft_strlen(env_var));
@@ -17,52 +22,38 @@ void	set_key_value_pair(char *env_var, t_pair_lst *new)
 		}
 		i++;
 	}
-	// printf("key:%s value:%s\n", new->key, new->value);
+	return (new);
 }
 
-t_pair_lst *copy_envp(char **envp)
+void	print_lst(t_pair_lst *env_vars)
 {
-	// t_pair_lst	**env_vars;
-	t_pair_lst	*new;
+	int i = 0;
+	while(env_vars)
+	{
+		i++;
+		printf("%d) key:%s value:%s\n", i, env_vars->key, env_vars->value);
+		env_vars = env_vars->next;
+	}
+}
 
-	g_env.env_vars = NULL;
-	new = malloc(sizeof(t_pair_lst));
-	if (!new)
-		return (NULL); //error malloc
-	new->next = NULL;
-	new->key = NULL;
-	new->value = NULL;
+void	clone_variables(char **envp, t_pair_lst **lst)
+{
+	t_pair_lst *new;
+
+	*lst = NULL;
 	while (*envp)
 	{
-		set_key_value_pair(*envp, new);
-		// printf("%s\n", *envp);
+		new = create_key_value_pair(*envp);
+		ft_listadd_back((t_token **)lst, (t_token *)new);
 		envp++;
-		ft_listadd_back((t_token **)&(g_env.env_vars), (t_token *)new);
-		printf("key:%s value:%s\n", (g_env.env_vars)->key, (g_env.env_vars)->value);
 	}
-
-	// while(*env_vars)
-	// {
-	// 	printf("key:%s value:%s\n", (*env_vars)->key, (*env_vars)->value);
-	// 	*env_vars = (*env_vars)->next;
-	// }
-	return (g_env.env_vars);
 }
 
-int	init_env_vars(char **envp)
-{
-	t_pair_lst *env_vars;
-	// g_env.env_vars = copy_envp(envp);
-	copy_envp(envp);
-	printf("key:%s value:%s\n", g_env.env_vars->key, g_env.env_vars->value);
-	env_vars = g_env.env_vars;
 
-	// int i = 0;
-	// while(env_vars)
-	// {
-	// 	i++;
-	// 	printf("%d) key:%s value:%s\n", i, env_vars->key, env_vars->value);
-	// 	env_vars = env_vars->next;
-	// }
+int	init_variables(char **envp)
+{
+	clone_variables(envp, &(g_env.env_vars));
+	clone_variables(envp, &(g_env.shell_vars));
+	// print_lst(g_env.env_vars);
 	return (0);
 }

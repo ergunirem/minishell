@@ -4,6 +4,7 @@ bool	exec_pwd(void)
 {
 	char	*path;
 
+	printf("PWD\n");
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (error_msg(PWD_ERROR_MSG));

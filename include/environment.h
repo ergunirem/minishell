@@ -23,12 +23,6 @@
 ** making it possible for child processes to inherit.
 */
 
-// typedef struct s_pair
-// {
-// 	char	*key;
-// 	char	*value;
-// }	t_pair;
-
 typedef struct s_pair_lst
 {
 	char	*key;
@@ -44,6 +38,7 @@ typedef struct s_env
 
 extern t_env	g_env;
 
-int	init_env_vars(char **envp);
+int	init_variables(char **envp);
+t_pair_lst	*create_key_value_pair(char *env_var);
 
 #endif
