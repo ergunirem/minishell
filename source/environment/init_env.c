@@ -1,7 +1,5 @@
 #include "../../include/environment.h"
 
-t_env	g_env;
-
 t_pair_lst	*create_key_value_pair(char *env_var)
 {
 	int i;
@@ -25,22 +23,10 @@ t_pair_lst	*create_key_value_pair(char *env_var)
 	return (new);
 }
 
-void	print_lst(t_pair_lst *env_vars)
-{
-	int i = 0;
-	while(env_vars)
-	{
-		i++;
-		printf("%d) key:%s value:%s\n", i, env_vars->key, env_vars->value);
-		env_vars = env_vars->next;
-	}
-}
-
 void	clone_variables(char **envp, t_pair_lst **lst)
 {
 	t_pair_lst *new;
 
-	*lst = NULL;
 	while (*envp)
 	{
 		new = create_key_value_pair(*envp);
@@ -49,11 +35,9 @@ void	clone_variables(char **envp, t_pair_lst **lst)
 	}
 }
 
-
 int	init_variables(char **envp)
 {
 	clone_variables(envp, &(g_env.env_vars));
-	clone_variables(envp, &(g_env.shell_vars));
-	// print_lst(g_env.env_vars);
+	// clone_variables(envp, g_env.shell_vars); //should this be created everytime there is a child process?
 	return (0);
 }

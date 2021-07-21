@@ -18,7 +18,9 @@ SRCS	=	source/minishell.c \
 			source/built_in/cd_pwd.c \
 			source/built_in/env.c \
 			source/built_in/export.c \
-			source/environment/init_env.c
+			source/built_in/unset.c \
+			source/environment/init_env.c \
+			source/environment/var.c
 
 OBJS	= $(SRCS:.c=.o)
 

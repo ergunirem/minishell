@@ -15,6 +15,8 @@
 # include "built_in.h"
 # include "environment.h"
 # include <stdbool.h>
+ #include <string.h>
+ #include <errno.h>
 
 // typedef enum { FALSE, TRUE } bool;
 
