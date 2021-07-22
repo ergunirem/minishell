@@ -15,6 +15,7 @@ bool	error_new_bool(char *command, char *arg, char *msg)
 	ft_putstr_fd(arg, 0);
 	ft_putstr_fd(": ", 0);
 	ft_putstr_fd(msg, 0);
+	ft_putstr_fd("\n", 0);
 	return (false);
 }
 
@@ -26,5 +27,6 @@ int		error_new_int(char *command, char *arg, char *msg)
 	ft_putstr_fd(arg, 0);
 	ft_putstr_fd(": ", 0);
 	ft_putstr_fd(msg, 0);
+	ft_putstr_fd("\n", 0);
 	return (1);
 }

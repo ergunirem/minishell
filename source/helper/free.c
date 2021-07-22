@@ -44,3 +44,10 @@ void	free_array(char **array)
 	}
 	free(array);
 }
+
+void	free_var(t_pair_lst *var)
+{
+	free(var->key);
+	free(var->value);
+	free(var);
+}
