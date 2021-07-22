@@ -53,7 +53,7 @@ int	execution(t_token *token, int nb, char **envp)
 	//put built-in logic here.
 	if(is_built_in(argument[0]))
 	{
-		printf("BUILT_IN\n");
+		// printf("BUILT_IN\n");
 		return(exec_built_in(argument, nb, envp));
 	}
 	if (fork() == 0)

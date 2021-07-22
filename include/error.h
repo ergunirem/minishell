@@ -10,6 +10,7 @@
 # define ENV_ERR_MSG "env: too many arguments\n"
 # define UNSET_ERR_MSG "not a valid identifier\n"
 
-bool	error_new(char *command, char *arg, char *msg);
+bool	error_new_bool(char *command, char *arg, char *msg);
+int		error_new_int(char *command, char *arg, char *msg);
 
 #endif

@@ -17,11 +17,13 @@ int	exec_export(char **args, int argc)
 	while(args[i])
 	{
 		if (ft_strrchr(args[i], '-'))
-		{
-			error_new("export", args[i], "not a valid identifier\n");
-			return (1);
-		}
+			return(error_new_int("export", args[i], "not a valid identifier\n"));
 		new = create_key_value_pair(args[i]);
+		if (!ft_isname(new->key))
+		{
+			free(new);
+			return(error_new_int("export", args[i], "not a valid identifier\n"));
+		}
 		if (find_env_var(g_env.env_vars, new->key))
 		{
 			update_var(g_env.env_vars, new->key, new->value);
