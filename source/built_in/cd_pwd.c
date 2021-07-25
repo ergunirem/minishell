@@ -1,14 +1,13 @@
 #include "../../include/built_in.h"
+#include "../../include/minishell.h"
 
-int	exec_pwd(void)
+int	exec_pwd(t_context *ctx)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
-	if (!path)
-		return (error_new_int("pwd", "getcwd", strerror(errno)));
-	ft_putstr_fd(path, 0);
-	ft_putstr_fd("\n", 0);
+	ft_putstr_fd(path, ctx->fd[1]);
+	ft_putstr_fd("\n", ctx->fd[1]);
 	free(path);
 	return (0);
 }
@@ -19,8 +18,8 @@ bool	change_dir_var(t_pair_lst *lst, char *var_name)
 	char		*path;
 
 	path = getcwd(NULL, 0);
-	if (!path)
-		return (error_new_bool("cd", "getcwd", strerror(errno)));
+	// if (!path)
+		// return (error_new_bool("cd", "getcwd", strerror(errno)));
 	env_var = find_env_var(lst, var_name);
 	free(env_var->value);
 	env_var->value = ft_strdup(path);
