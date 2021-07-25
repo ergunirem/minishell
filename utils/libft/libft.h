@@ -6,7 +6,11 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 13:43:20 by icikrikc      #+#    #+#                 */
+<<<<<<< HEAD
+/*   Updated: 2021/07/22 12:54:02 by icikrikc      ########   odam.nl         */
+=======
 /*   Updated: 2021/05/23 17:38:25 by icikrikc      ########   odam.nl         */
+>>>>>>> Xiaojing
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +79,10 @@ void			ft_putstr(char *s);
 void			ft_lstfree(t_list **ptr_lst);
 void			ft_lstfree_w_content(t_list **ptr_lst);
 void			ft_exit_basic(char *msg);
+<<<<<<< HEAD
+int				ft_str_isalnum(char *str);
+int				ft_isname(char *str);
+=======
 
+>>>>>>> Xiaojing
 #endif

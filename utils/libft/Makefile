@@ -38,6 +38,8 @@ REG_SOURCE_FILES =		ft_atoi.c \
 						ft_iswhitespace.c \
 						ft_putstr.c \
 						ft_exit.c \
+						ft_str_isalnum.c \
+						ft_isname.c \
 
 BONUS_SOURCE_FILES =	ft_lstnew.c \
 						ft_lstadd_front.c \

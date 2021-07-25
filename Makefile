@@ -4,14 +4,23 @@ RED = \033[38;5;1m
 BLUE = \033[38;5;4m
 YELLOW = \033[1;33m
 
-SRCS	= minishell.c \
-			lexer.c \
-			parser.c \
-			print_tree.c \
-			print_token.c \
-			check.c \
-			error.c \
-			free.c \
+SRCS	=	source/minishell.c \
+			source/parse/lexer.c \
+			source/parse/parser.c \
+			source/parse/check.c \
+			source/prints/print_tree.c \
+			source/prints/print_token.c \
+			source/helper/error.c \
+			source/helper/free.c \
+			source/exec/exec_existing_prog.c\
+			source/exec/exec.c \
+			source/built_in/built_in.c \
+			source/built_in/cd_pwd.c \
+			source/built_in/env.c \
+			source/built_in/export.c \
+			source/built_in/unset.c \
+			source/environment/init_env.c \
+			source/environment/var.c
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -22,7 +31,7 @@ GCC		= gcc
 FLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
 # FLAGS	= -Wall -Wextra -Werror
 
-HEADER_FILE = minishell.h
+HEADER_FILE = include/minishell.h
 
 LIBFT_DIR = utils/libft
 
