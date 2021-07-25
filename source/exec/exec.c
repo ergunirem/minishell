@@ -1,4 +1,15 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
 #include "../../include/minishell.h"
+#include "../../include/built_in.h"
+
+#define FORK_CHILD 0
+
+static int	exec_node(t_tree_node *node, t_context *ctx, char **envp);
+static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp);
+static int	exec_command(t_tree_node *node, t_context *ctx, char **envp);
+static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp);
 
 int	count_node(t_token *token)
 {
@@ -13,59 +24,88 @@ int	count_node(t_token *token)
 	return (i);
 }
 
-void	execute_pipe(t_pipe_node pipe, char **envp)
+void	exec(t_tree_node *node, char **envp)
 {
-	execute_tree(pipe.left, envp);
-	execute_tree(pipe.right, envp);
-}
+	int	children;
 
-void	execute_cmd(t_cmd_node cmd, char **envp)
-{
-	int	nb;
-
-	nb = count_node(cmd.tokens);
-	execution(cmd.tokens, nb, envp);
-}
-
-void	execute_tree(t_tree_node *tree, char **envp)
-{
-	if (tree->type == PIPE_NODE)
-		execute_pipe(tree->data.pipe, envp);
-	else
-		execute_cmd(tree->data.cmd, envp);
-}
-
-int	execution(t_token *token, int nb, char **envp)
-{
-	char	**argument;
-
-	argument = malloc((nb + 1) * sizeof(char *));
-	if (!argument)
-		return(-1);//error
-	argument[nb] = NULL;
-	nb = 0;
-	while (token)
-	{
-		argument[nb] = ft_strdup(token->content);
-		nb++;
-		token = token->next;
-	}
-	//put built-in logic here.
-	if(is_built_in(argument[0]))
-	{
-		// printf("BUILT_IN\n");
-		return(exec_built_in(argument, nb, envp));
-	}
-	if (fork() == 0)
-	{
-		if (execute_program(argument, envp) == -1)
-			return (-1); // error
-		return (0);
-	}
-	else
+	t_context ctx = {{STDIN_FILENO, STDOUT_FILENO}, -1}; //initialize the context struct with stdin, stdout
+	children = exec_node(node, &ctx, envp);//calculate how many waits from the children processes
+	while (children > 0)
 	{
 		wait(NULL);
-		free_array(argument);
+		children--;
+	}
+}
+
+static int	exec_node(t_tree_node *node, t_context *ctx, char **envp)
+{
+	if (node->type == CMD_NODE) 
+		return (exec_command(node, ctx, envp));
+	if (node->type == PIPE_NODE)
+		return (exec_pipe(node, ctx, envp));
+	else
+		return (0);
+}
+
+static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
+{
+	int			p[2];
+	int			children;
+	t_context	left_ctx;
+	t_context	right_ctx;
+
+	pipe(p);// add error check for pipe (if pipe(p) == -1)
+	children = 0;
+	left_ctx = *ctx;
+	left_ctx.fd[1] = p[1];
+	left_ctx.fd_close = p[0];
+	children = children + exec_node(node->data.pipe.left, &left_ctx, envp);
+	close(p[1]);
+	right_ctx = *ctx;
+	right_ctx.fd[0] = p[0];
+	right_ctx.fd_close = p[1];
+	children = children + exec_node(node->data.pipe.right, &right_ctx, envp);
+	close(p[0]);
+	return (children);
+}
+
+static int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
+{
+	int	argc;
+
+	argc = count_node(node->data.cmd.tokens);
+	return (exec_command2(node->data.cmd.tokens, argc, ctx, envp));
+}
+
+static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
+{
+	char	**argv;
+
+	argv = malloc((argc + 1) * sizeof(char *));
+	if (!argv)
+		return (-1);
+	argv[argc] = NULL;
+	argc = 0;
+	while (token)
+	{
+		argv[argc] = ft_strdup(token->content);
+		argc++;
+		token = token->next;
+	}
+	if (is_built_in(argv[0]))
+	{
+		exec_built_in(argv, argc, ctx, envp);
 		return (0);
 	}
+	if (fork() == FORK_CHILD)
+	{
+		dup2(ctx->fd[0], 0);
+		dup2(ctx->fd[1], 1);
+		if (ctx->fd_close >= 0)
+			close(ctx->fd_close);
+		if (execute_existing_program(argv, envp) == -1)
+			return (-1);
+	}
+	free_array(argv);
+	return (1);
 }
