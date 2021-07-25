@@ -32,16 +32,20 @@ bool	change_dir_var(t_pair_lst *lst, char *var_name)
 bool	exec_cd(char **arguments)
 {
 	t_pair_lst	*env_var;
+	char		*tmp;
 
 	change_dir_var(g_env.env_vars, "OLDPWD");
 	if (!arguments[1])
 	{
 		env_var = find_env_var(g_env.env_vars, "HOME");
-		if (chdir(env_var->value))
-			return (error_msg(CD_ERROR_MSG));
+		if (chdir(env_var->value) == -1)
+			return (error_new_bool("cd", env_var->value, strerror(errno)));
+		return(change_dir_var(g_env.env_vars, "PWD"));
 	}
-	else if (chdir(arguments[1]) == -1)
-		return (error_msg(CD_ERROR_MSG));
-	change_dir_var(g_env.env_vars, "PWD");
-	return (true);
+	//should we get rid of quotes in lexer part?
+	tmp = ft_strtrim(arguments[1], "\""); //any issue with using both " and '
+	if (chdir(tmp) == -1)
+		return (error_new_bool("cd", tmp, strerror(errno)));
+	free(tmp);
+	return (change_dir_var(g_env.env_vars, "PWD"));
 }
