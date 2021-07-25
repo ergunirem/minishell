@@ -17,7 +17,7 @@ bool	exec_cd(char **arguments);
 int		exec_env(char **args, int argc);
 int		exec_export(char **args, int argc);
 int		exec_unset(char **args, int argc);
-int		exec_echo(char **args, int argc);
+int		exec_echo(char **args, int argc, t_context *ctx);
 int		exec_exit(char **args, int argc);
 
 #endif
