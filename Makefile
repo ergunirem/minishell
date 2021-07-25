@@ -19,6 +19,8 @@ SRCS	=	source/minishell.c \
 			source/built_in/env.c \
 			source/built_in/export.c \
 			source/built_in/unset.c \
+			source/built_in/echo.c \
+			source/built_in/exit.c \
 			source/environment/init_env.c \
 			source/environment/var.c
 

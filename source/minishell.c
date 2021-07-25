@@ -23,16 +23,14 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("Minishell$ ");
 		if (ft_strlen(line) > 0)
 			add_history(line);
-		if (!ft_strncmp(line, "exit", 5))
-			break;
 		lexer(line, &tokens);
-		lst_print(tokens);
+		// lst_print(tokens);
 		if(check_list(tokens))
 		{
 			root = parser(&tokens);
 			// execution(root->data.cmd.tokens, envp);
 			execute_tree(root, envp);
-			print_tree(root);
+			// print_tree(root);
 			free_tree(root);
 		}
 		free_tokens(&tokens);

@@ -31,9 +31,9 @@ bool	exec_built_in(char **args, int argc, char **envp)
 		return(exec_unset(args, argc));
 	if(ft_strncmp(args[0], "env", 4) == 0)
 		return(exec_env(args, argc));
-	// if(ft_strncmp(cmd, "echo", 5) == 0)
-	// 	return(exec_echo());
-	// if(ft_strncmp(cmd, "exit", 5) == 0)
-	// 	return(exec_exit());
+	if(ft_strncmp(args[0], "echo", 5) == 0)
+		return(exec_echo(args, argc));
+	if(ft_strncmp(args[0], "exit", 5) == 0)
+		return(exec_exit(args, argc));
 	return (false);
 }
