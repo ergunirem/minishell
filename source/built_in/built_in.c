@@ -34,6 +34,6 @@ bool	exec_built_in(char **args, int argc, t_context *ctx, char **envp)
 	if(ft_strncmp(args[0], "echo", 5) == 0)
 		return(exec_echo(args, argc, ctx));
 	if(ft_strncmp(args[0], "exit", 5) == 0)
-		return(exec_exit(args, argc));
+		return(exec_exit(args, argc, ctx));
 	return (false);
 }
