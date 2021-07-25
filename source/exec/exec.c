@@ -39,7 +39,7 @@ void	exec(t_tree_node *node, char **envp)
 
 static int	exec_node(t_tree_node *node, t_context *ctx, char **envp)
 {
-	if (node->type == CMD_NODE) 
+	if (node->type == CMD_NODE)
 		return (exec_command(node, ctx, envp));
 	if (node->type == PIPE_NODE)
 		return (exec_pipe(node, ctx, envp));
@@ -101,6 +101,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		dup2(ctx->fd[0], 0);
 		dup2(ctx->fd[1], 1);
+		dup2(ctx->fd[2], 2); //stderr ?not sure?
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
 		if (execute_existing_program(argv, envp) == -1)
