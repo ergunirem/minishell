@@ -24,7 +24,7 @@ bool	change_dir_var(t_pair_lst *lst, char *var_name)
 	free(env_var->value);
 	env_var->value = ft_strdup(path);
 	if (!env_var->value)
-		return (error_new_bool("cd", "ft_stdrup", "Malloc failed\n"));
+		return (error_new_bool("cd", "ft_stdrup", "Malloc failed\n", 1));
 	free(path);
 	return (true);
 }
@@ -39,13 +39,13 @@ bool	exec_cd(char **arguments)
 	{
 		env_var = find_env_var(g_env.env_vars, "HOME");
 		if (chdir(env_var->value) == -1)
-			return (error_new_bool("cd", env_var->value, strerror(errno)));
+			return (error_new_bool("cd", env_var->value, strerror(errno), 1));
 		return(change_dir_var(g_env.env_vars, "PWD"));
 	}
 	//should we get rid of quotes in lexer part?
 	tmp = ft_strtrim(arguments[1], "\""); //any issue with using both " and '
 	if (chdir(tmp) == -1)
-		return (error_new_bool("cd", tmp, strerror(errno)));
+		return (error_new_bool("cd", tmp, strerror(errno), 1));
 	free(tmp);
 	return (change_dir_var(g_env.env_vars, "PWD"));
 }

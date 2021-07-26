@@ -11,9 +11,9 @@ int	exec_unset(char **args, int argc)
 	while(args[i])
 	{
 		if (!ft_isname(args[i]))
-			error_new_int(args[0], args[i], UNSET_ERR_MSG);
+			error_new_int(args[0], args[i], UNSET_ERR_MSG, 1);
 		else if(ft_strchr(args[i], '='))
-			error_new_int(args[0], args[i], UNSET_ERR_MSG);
+			error_new_int(args[0], args[i], UNSET_ERR_MSG, 1);
 		else if(find_env_var(g_env.env_vars, args[i]))
 			remove_var(&g_env.env_vars, args[i]);
 		i++;
