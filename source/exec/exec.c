@@ -89,6 +89,9 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	while (token)
 	{
 		argv[argc] = ft_strdup(token->content);
+		// if(ft_strrchr(argv[argc], '$'))
+		// 	expand_param(argv[argc]);
+		// remove_quotes();
 		argc++;
 		token = token->next;
 	}

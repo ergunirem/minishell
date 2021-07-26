@@ -22,7 +22,8 @@ SRCS	=	source/minishell.c \
 			source/built_in/echo.c \
 			source/built_in/exit.c \
 			source/environment/init_env.c \
-			source/environment/var.c
+			source/environment/var.c \
+			# source/expansion/expand_param.c
 
 OBJS	= $(SRCS:.c=.o)
 
