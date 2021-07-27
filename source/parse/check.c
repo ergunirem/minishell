@@ -5,7 +5,6 @@
 **		There is nothing before a '|'
 **		There is nothing after a '|'
 */
-
 static	bool	check_pipe(t_token *tokens)
 {
 	if (tokens->type == CHAR_PIPE)
@@ -28,9 +27,6 @@ static	bool	check_pipe(t_token *tokens)
 **	returns false if
 **		There is nothing after a '>' '<' '>>' '<<'
 */
-
-//a new way to check if (token->next->type >= REDIRECTIONS) > based on values of enum
-
 static	bool	check_redirection(t_token *tokens)
 {
 	while (tokens)
@@ -54,7 +50,6 @@ static	bool	check_redirection(t_token *tokens)
 **		pipe check fails
 **		redirection check fails
 */
-
 bool	check_list(t_token *tokens)
 {
 	if (!tokens)
