@@ -3,12 +3,15 @@
 
 # include <stdbool.h>
 
-# define PIPE_ERROR_MSG "syntax error near unexpected token `|'\n"
-# define REDIR_ERROR_MSG "syntax error near unexpected token redirection\n"
+# define MALLOC_ERROR "malloc failed"
+# define QUOTE_ERROR "unclosed qoute"
+# define PIPE_ERROR_MSG "syntax error near unexpected token `|'"
+# define REDIR_ERROR_MSG "syntax error near unexpected token redirection"
 # define ENV_ERR_MSG "env: too many arguments"
 # define IDENTIFIER_ERR_MSG "not a valid identifier"
 
 bool	error_new_bool(char *command, char *arg, char *msg, int fd);
 int		error_new_int(char *command, char *arg, char *msg, int fd);
+bool	lexer_error(t_token **tokens, char *msg);
 
 #endif

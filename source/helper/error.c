@@ -2,8 +2,9 @@
 
 bool	error_msg(char *msg)
 {
-	ft_putstr_fd("Minishell: ", 0);
-	ft_putstr_fd(msg, 0);
+	ft_putstr_fd("Minishell: ", 1);
+	ft_putstr_fd(msg, 1);
+	ft_putstr_fd("\n", 1);
 	return (false);
 }
 
@@ -29,4 +30,13 @@ int		error_new_int(char *command, char *arg, char *msg, int fd)
 	ft_putstr_fd(msg, fd);
 	ft_putstr_fd("\n", fd);
 	return (1);
+}
+
+bool	lexer_error(t_token **tokens, char *msg)
+{
+	ft_putstr_fd("Minishell: error: ", 1);
+	ft_putstr_fd(msg, 1);
+	ft_putstr_fd("\n", 1);
+	free_tokens(tokens);
+	return (false);
 }

@@ -19,13 +19,6 @@
 # include <string.h>
 # include <errno.h>
 
-// typedef enum { FALSE, TRUE } bool;
-
-// typedef struct	s_context{
-// 	int	fd[2];
-// 	int fd_close;
-// }	t_context;
-
 void	lst_print(t_token *list);
 bool	check_list(t_token *tokens);
 bool	error_msg(char *msg);

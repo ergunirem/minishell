@@ -1,7 +1,6 @@
-
 #include "../../include/minishell.h"
 
-t_token	*initialize(void)
+static t_token	*initialize_token(void)
 {
 	t_token	*new;
 
@@ -14,33 +13,7 @@ t_token	*initialize(void)
 	return (new);
 }
 
-t_token	*ft_listlast(t_token *lst)
-{
-	if (lst == NULL)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
-
-void	ft_listadd_back(t_token **lst, t_token *new)
-{
-	t_token	*last;
-
-	if (new && *lst)
-	{
-		last = ft_listlast(*lst);
-		last->next = new;
-		new->next = NULL;
-	}
-	else if (!*lst)
-	{
-		*lst = new;
-		new->next = NULL;
-	}
-}
-
-void	tokenize_word(char *str, t_token *new, int *i)
+static void	tokenize_word(char *str, t_token *new, int *i)
 {
 	int	start;
 	int	n;
@@ -58,7 +31,7 @@ void	tokenize_word(char *str, t_token *new, int *i)
 		*i = *i + 1;
 }
 
-int	tokenize_quote_word(char *str, t_token *new, int *i)
+static bool	tokenize_quote_word(char *str, t_token *new, int *i)
 {
 	char	c;
 	int		start;
@@ -83,16 +56,13 @@ int	tokenize_quote_word(char *str, t_token *new, int *i)
 		}
 	}
 	else
-		return (-1);
-	return (0);
+		return (false); //ask why this error? can we print smth? connect this to lexer-main error chain?
+	return (true);
 }
 
-int	tokenize_special_char(char *str, t_token *new, int *i)
+static void	tokenize_special_char(char *str, t_token *new, int *i)
 {
-	// how to move within string so that in the lexer func it moves to the next char?
-	// and how to make the function go: this token is done go to the next token?
-	//is checking for a space after special char necessary?
-	if (str[*i] == '|') // ?
+	if (str[*i] == '|')
 	{
 		new->type = CHAR_PIPE;
 		(*i)++;
@@ -117,40 +87,33 @@ int	tokenize_special_char(char *str, t_token *new, int *i)
 		new->type = CHAR_GREAT;
 		(*i)++;
 	}
-	else
-	{
-		//problem: always goes into this condition when end of the line
-		printf("error in check_special\n");
-		return (-1);
-	}
-	// printf("new added is %s and type is %d\n", new->content, new->type);
-	return (0);
 }
 
-void	lexer(char *str, t_token **token)
+bool	lexer(char *str, t_token **tokens)
 {
 	t_token		*new;
 	int			i;
 
-	*token = NULL;
 	i = 0;
-	while (str[i] != '\0')//would it be possible to not have it end with \n
+	while (str[i] != '\0')
 	{
-		new = initialize();
 		while (ft_iswhitespace(str[i]))
 			i++;
-		if (ft_strchr("|><", str[i]))
-		{
-			if (tokenize_special_char(str, new, &i) == -1)
-				return ;
-		}
+		if (str[i] == '\0')
+			return (true);
+		new = initialize_token();
+		if (!new)
+			return (lexer_error(tokens, MALLOC_ERROR));
+		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+			tokenize_special_char(str, new, &i);
 		else if (str[i] == '\'' || str[i] == '\"')
 		{
-			if (tokenize_quote_word(str, new, &i) == -1)
-				return ;
+			if (!tokenize_quote_word(str, new, &i))
+				return (lexer_error(tokens, QUOTE_ERROR));
 		}
 		else
 			tokenize_word(str, new, &i);
-		ft_listadd_back(token, new);
+		ft_listadd_back(tokens, new);
 	}
+	return (true);
 }

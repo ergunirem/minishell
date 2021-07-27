@@ -1,6 +1,8 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
+# include <stdbool.h>
+
 typedef enum e_TokenType{
 	CHAR_PIPE = 'P',
 	CHAR_LESS = 'L',
@@ -17,6 +19,6 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-void	lexer(char *str, t_token **token);
+bool	lexer(char *str, t_token **tokens);
 
 #endif

@@ -21,10 +21,11 @@ int	main(int argc, char **argv, char **envp)
 	while (keep_running)
 	{
 		line = readline("Minishell$ ");
-		if (ft_strlen(line) > 0)
-			add_history(line);
-		lexer(line, &tokens);
-		// lst_print(tokens);
+		add_history(line);
+		tokens = NULL;
+		if(!lexer(line, &tokens))
+			continue ;
+		lst_print(tokens);
 		if(check_list(tokens))
 		{
 			root = parser(&tokens);
