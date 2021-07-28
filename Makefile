@@ -6,8 +6,9 @@ YELLOW = \033[1;33m
 
 SRCS	=	source/minishell.c \
 			source/parse/lexer.c \
-			source/parse/parser.c \
 			source/parse/check.c \
+			source/parse/parser.c \
+			source/parse/peek.c \
 			source/prints/print_tree.c \
 			source/prints/print_token.c \
 			source/helper/error.c \
@@ -24,7 +25,7 @@ SRCS	=	source/minishell.c \
 			source/built_in/exit.c \
 			source/environment/init_env.c \
 			source/environment/var.c \
-			# source/expansion/expand_param.c
+			source/expand/expand_param.c
 
 OBJS	= $(SRCS:.c=.o)
 

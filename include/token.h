@@ -20,5 +20,7 @@ typedef struct s_token
 }	t_token;
 
 bool	lexer(char *str, t_token **tokens);
+void	print_tokens(t_token *list);
+void	free_tokens(t_token **tokens);
 
 #endif

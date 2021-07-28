@@ -10,6 +10,7 @@
 # define ENV_ERR_MSG "env: too many arguments"
 # define IDENTIFIER_ERR_MSG "not a valid identifier"
 
+bool	error_msg(char *msg);
 bool	error_new_bool(char *command, char *arg, char *msg, int fd);
 int		error_new_int(char *command, char *arg, char *msg, int fd);
 bool	lexer_error(t_token **tokens, char *msg);

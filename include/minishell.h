@@ -19,17 +19,10 @@
 # include <string.h>
 # include <errno.h>
 
-void	lst_print(t_token *list);
-bool	check_list(t_token *tokens);
-bool	error_msg(char *msg);
-void	free_tokens(t_token **tokens);
-void	free_tree(t_tree_node *tree);
 void	free_array(char **array);
-int		execution(t_token *token, int nb, char **envp);
-// void	execute_tree(t_tree_node *tree, char **envp);
 // int		execute_program(char **argument, char **envp);
 int	execute_existing_program(char **argument, char **envp);
-void	ft_listadd_back(t_token **lst, t_token *new); //?move to libft
+void	ft_listadd_back(t_token **lst, t_token *new);
 void	exec(t_tree_node *node, char **envp);
 
 #endif

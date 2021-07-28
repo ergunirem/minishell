@@ -57,6 +57,7 @@ bool		check_list(t_token *tokens);
 t_tree_node	*parser(t_token **tokens);
 int			peak_ahead(t_token *tokens);
 void		print_tree(const t_tree_node *tree);
+void		free_tree(t_tree_node *tree);
 void		visit_tree(const t_tree_node *tree, size_t spaces);
 
 #endif

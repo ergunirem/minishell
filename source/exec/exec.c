@@ -89,12 +89,13 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	while (token)
 	{
 		argv[argc] = ft_strdup(token->content);
-		// if(ft_strrchr(argv[argc], '$'))
-		// 	expand_param(argv[argc]);
+		if(ft_strrchr(argv[argc], '$'))
+			argv[argc] = expand_param(argv[argc]);
 		// remove_quotes();
 		argc++;
 		token = token->next;
 	}
+	// printf("ARGV:%s\n", argv[0]);
 	if (is_built_in(argv[0]))
 	{
 		exec_built_in(argv, argc, ctx, envp);

@@ -7,7 +7,7 @@
 # define PURPLE "\033[0;35m"
 # define YELLOW "\033[0;33m"
 
-void	lst_print(t_token *list)
+void	print_tokens(t_token *list)
 {
 	printf("%s*********** TokenList ************%s\n\n", PURPLE, RESET);
 	while (list)

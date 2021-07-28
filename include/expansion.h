@@ -1,6 +1,6 @@
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
-int	expand_param(char *arg);
+char	*expand_param(char *arg);
 
 #endif
