@@ -14,6 +14,17 @@ static int redirect_output(char c, char *file)
 	return (fd);
 }
 
+static int redirect_input(char c, char *file)
+{
+	int	fd;
+
+	if (c == CHAR_LESS)
+		fd = open(file, O_RDONLY);
+	// else if (c == CHAR_DGREAT)
+	// 	fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	return (fd);
+}
+
 // static int redirect_input(char c, char *file)
 // {
 // 	int	fd;
@@ -28,24 +39,40 @@ static int redirect_output(char c, char *file)
 t_token	*redirection(t_token *token, t_context *ctx)
 {
 	int	fd;
+	char	*file;
 
 	if (!token->next || !token->next->content)
 		return (NULL);//error as nothing follow the redirection operator
+	file = ft_strdup(token->next->content);
+	if(ft_strrchr(file, '$'))
+		file = expand_param(file);
+	printf("file name is %s\n", file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
-		fd = redirect_output(token->type, token->next->content);
-		printf("open fd is %d\n", fd);
+		fd = redirect_output(token->type, file);
+		// printf("open fd is %d\n", fd);
 		ctx->redir[1] = fd;
-		printf("redir[0] and redir[1] is %d %d\n", ctx->redir[0], ctx->redir[1]);
+		// printf("redir[0] and redir[1] is %d %d\n", ctx->redir[0], ctx->redir[1]);
 		if (fd < 0)
 			return (NULL); //error when try to open file
 		else
+		{
+			ctx->fd[1] = fd;
 			return (token->next->next);
+		}
 	}
-	// if (token->type == CHAR_DGREAT)
-	// {
-
-	// }
+	if (token->type == CHAR_LESS)
+	{
+		fd = redirect_input(token->type, file);
+		ctx->redir[0] = fd;
+		if (fd < 0)
+			return (NULL); //error when try to open file
+		else
+		{
+			ctx->fd[0] = fd;
+			return (token->next->next);
+		}
+	}
 	// if (token->type == CHAR_LESS)
 	// {
 
@@ -54,6 +81,7 @@ t_token	*redirection(t_token *token, t_context *ctx)
 	// {
 		
 	// }
+	free(file);
 }
 
 int	count_redirection(t_token *token, t_context *ctx)

@@ -7,17 +7,8 @@ int	exec_pwd(t_context *ctx)
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (error_new_int("pwd", "getcwd", strerror(errno), ctx->fd[2]));
-	if (ctx->redir[1] > 0)
-	{
-		printf("print into the output file\n");
-		ft_putstr_fd(path, ctx->redir[1]);
-		ft_putstr_fd("\n", ctx->redir[1]);
-	}
-	else
-	{
-		ft_putstr_fd(path, ctx->fd[1]);
-		ft_putstr_fd("\n", ctx->fd[1]);
-	}
+	ft_putstr_fd(path, ctx->fd[1]);
+	ft_putstr_fd("\n", ctx->fd[1]);
 	// printf("in pwd ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
 	free(path);
 	return (0);
