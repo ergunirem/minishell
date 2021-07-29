@@ -25,7 +25,8 @@ SRCS	=	source/minishell.c \
 			source/built_in/exit.c \
 			source/environment/init_env.c \
 			source/environment/var.c \
-			source/expand/expand_param.c
+			source/expand/expand_param.c \
+			source/redirection/redirection_copy.c
 
 OBJS	= $(SRCS:.c=.o)
 

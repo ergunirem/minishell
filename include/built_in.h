@@ -6,7 +6,9 @@
 
 typedef struct	s_context{
 	int	fd[3];
+	// int	fd[2];
 	int fd_close;
+	int	redir[2];
 }	t_context;
 
 bool	is_built_in(char *cmd);
@@ -18,5 +20,7 @@ int		exec_export(char **args, int argc, t_context *ctx);
 int		exec_unset(char **args, int argc, t_context *ctx);
 int		exec_echo(char **args, int argc, t_context *ctx);
 int		exec_exit(char **args, int argc, t_context *ctx);
+t_token	*redirection(t_token *token, t_context *ctx);
+int	count_redirection(t_token *token, t_context *ctx);
 
 #endif

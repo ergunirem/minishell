@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			root = parser(&tokens);
 			exec(root, envp);
-			//print_tree(root);
+			// print_tree(root);
 			free_tree(root);
 		}
 		free_tokens(&tokens);
