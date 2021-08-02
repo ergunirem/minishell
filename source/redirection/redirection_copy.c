@@ -45,7 +45,7 @@ t_token	*redirection(t_token *token, t_context *ctx)
 		return (NULL);//error as nothing follow the redirection operator
 	file = ft_strdup(token->next->content);
 	if(ft_strrchr(file, '$'))
-		file = expand_param(file);
+		file = remove_quotes_and_expand(file);
 	printf("file name is %s\n", file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
@@ -79,7 +79,7 @@ t_token	*redirection(t_token *token, t_context *ctx)
 	// }
 	// if (token->type == CHAR_DLESS)
 	// {
-		
+
 	// }
 	free(file);
 }
