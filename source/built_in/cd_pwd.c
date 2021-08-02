@@ -36,7 +36,7 @@ int	exec_cd(char **arguments, t_context *ctx)
 	t_pair_lst	*env_var;
 	char		*tmp;
 
-	if (ft_strncmp(arguments[1], "-", 2) == 0)
+	if (arguments[1] && ft_strncmp(arguments[1], "-", 2) == 0)
 	{
 		env_var = find_env_var(g_env.env_vars, "OLDPWD");
 		//prints out the oldpwd when cd -
