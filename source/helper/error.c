@@ -29,14 +29,15 @@ int		error_new_int(char *command, char *arg, char *msg, int fd)
 	ft_putstr_fd(": ", fd);
 	ft_putstr_fd(msg, fd);
 	ft_putstr_fd("\n", fd);
-	return (1);
+	return (1); //will it be -1 when incorporated into get_path error message
 }
 
-bool	lexer_error(t_token **tokens, char *msg)
+bool	lexer_error(t_token **tokens, t_token *new, char *msg)
 {
 	ft_putstr_fd("Minishell: error: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
+	free(new);
 	free_tokens(tokens);
 	return (false);
 }

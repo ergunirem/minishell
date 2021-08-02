@@ -23,7 +23,7 @@ int	main(int argc, char **argv, char **envp)
 		tokens = NULL;
 		if (!lexer(line, &tokens))
 			continue ;
-		//print_tokens(tokens);
+		print_tokens(tokens);
 		if (check_list(tokens))
 		{
 			root = parser(&tokens);

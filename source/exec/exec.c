@@ -99,7 +99,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later. 
+			token = redirection(token, ctx);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
 			printf("after redirection ctx redir[0] redir[1] and close is %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd_close);
 			// if (!token)
 			// 	return (-1);//later update error treat, this is error related to open input/output file
@@ -107,7 +107,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		else
 		{
 			argv[argc] = ft_strdup(token->content);
-			if(ft_strrchr(argv[argc], '$'))
+			if(ft_strrchr(argv[argc], '$') && argv[argc][0] != '\'')
 				argv[argc] = expand_param(argv[argc]);//need to also apply to redirection file name
 			// remove_quotes();
 			argc++;
@@ -132,7 +132,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	if (fork() == FORK_CHILD)
 	{
 		if (ctx->redir[0] > 0)
-			dup2(ctx->redir[0], 0);	
+			dup2(ctx->redir[0], 0);
 		else
 			dup2(ctx->fd[0], 0);
 		if (ctx->redir[1] > 0)
