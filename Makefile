@@ -26,6 +26,7 @@ SRCS	=	source/minishell.c \
 			source/environment/init_env.c \
 			source/environment/var.c \
 			source/expand/remove_and_expand.c \
+			source/expand/just_expand.c \
 			source/redirection/redirection_copy.c \
 			source/redirection/redirect_heredoc.c
 # update later on the redirection

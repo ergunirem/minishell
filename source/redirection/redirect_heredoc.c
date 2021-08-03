@@ -20,7 +20,7 @@ static void	with_expansion(char *delimiter, char *newline, int *fd)
 	while (str_cmp(delimiter, newline) != 0)
 	{
 		if (ft_strrchr(newline, '$'))
-			newline = expand_param(newline);
+			newline = just_expand(newline);
 		len_nl = ft_strlen(newline);
 		write(fd[1], newline, len_nl);
 		write(fd[1], "\n", 1);

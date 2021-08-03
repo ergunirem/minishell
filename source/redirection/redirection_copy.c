@@ -40,7 +40,7 @@ t_token	*redirection(t_token *token, t_context *ctx, int count)
 		else
 			return (NULL);
 	}
-	file = remove_and_expand(file);
+	file = remove_quotes_and_expand(file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
 		fd = redirect_output(token->type, file);
