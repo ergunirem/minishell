@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/04 13:43:20 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/07/25 21:56:06 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/02 16:17:03 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ void			ft_lstfree_w_content(t_list **ptr_lst);
 void			ft_exit_basic(char *msg);
 int				ft_str_isalnum(char *str);
 int				ft_isname(char *str);
+void			*ft_reassign(void *old_ptr, void *new_ptr);
 #endif
