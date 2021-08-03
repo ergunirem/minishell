@@ -28,7 +28,8 @@ void	exec(t_tree_node *node, char **envp)
 {
 	int	children;
 
-	t_context ctx = {{STDIN_FILENO, STDOUT_FILENO, 2}, -1, {0, 0}}; //initialize the context struct with stdin, stdout
+	// t_context ctx = {{STDIN_FILENO, STDOUT_FILENO, 2}, -1, {0, 0}}; //initialize the context struct with stdin, stdout
+	t_context ctx = {{STDIN_FILENO, STDOUT_FILENO, 2}, -1, 0}; //initialize the context struct with stdin, stdout
 	children = exec_node(node, &ctx, envp);//calculate how many waits from the children processes
 	// printf("childre number is %d\n", children);
 	while (children > 0)
@@ -121,7 +122,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		else
 		{
 			argv[argc] = ft_strdup(token->content);
-			// printf("argv %d is %s\n", argc, argv[argc]);
+			printf("argv %d is %s\n", argc, argv[argc]);
 			if(ft_strrchr(argv[argc], '$'))
 				argv[argc] = expand_param(argv[argc]);//need to also apply to redirection file name
 			argc++;
@@ -154,7 +155,9 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 			return (-1);
 	}
 	free_array(argv);
+	printf("ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
 	close_redirection(ctx->redir, count);
+	printf("close fd is %d\n", ctx->fd_close);
 	free(ctx->redir);
 	return (1);
 }
