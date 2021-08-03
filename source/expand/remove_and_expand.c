@@ -1,6 +1,5 @@
 #include "../../include/expansion.h"
 #include "../../include/minishell.h"
-/* I need this for libft.h > what else to do? */
 
 /*
 **	If there is no quote in argument, q_mode is already set to zero.
@@ -18,9 +17,28 @@ static void	set_quote_mode(char c, char *q_mode)
 }
 
 /*
-**	Example: $VAR.txt
+**	If arg is $, "$", $$, "$$" etc, it skips the $ char
 **	Traverses until a char that's not in variable name convention
-**	Finds the value of var in env variables
+*/
+static int	get_var_name(char *str, int i, int *j)
+{
+	if (str[i + 1] == '\0'|| str[i + 1] == '$' || str[i + 1] == '\"')
+		return (0);
+	if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
+		(*j)++;
+	if (*j == 2)
+	{
+		while (ft_isalnum(str[i + *j]) || str[i + *j] == '_')
+		{
+			(*j)++;
+		}
+	}
+	return (1);
+}
+
+/*
+**	Example: $VAR.txt
+**	Finds the value of VAR in env variables
 **	If VAR is non-existent, removes it from string
 **	Else, appends the value to the string
 */
@@ -32,9 +50,8 @@ static int	expand(char **str, int i)
 	int			j;
 
 	j = 1;
-	//but 1TEST is no var name compliant?
-	while (ft_isalnum((int)(*str)[i + j]) || (*str)[i + j] == '_')
-		j++;
+	if (!get_var_name(*str, i, &j))
+		return (i + 1);
 	// if (j == 1 && ft_index("?'\"", (*str)[i + j]) == -1)
 	// 	return (i + 1);
 	// if ((*str)[i + 1] == '?' && ++j)
@@ -45,6 +62,8 @@ static int	expand(char **str, int i)
 	free(var_name);
 	if (!env_var)
 	{
+		if (j == 1)
+			j++;
 		ft_memmove(&(*str)[i], &(*str)[i + j], ft_strlen(&(*str)[i + j]) + 1);
 		return (i);
 	}
@@ -67,9 +86,11 @@ char	*remove_quotes_and_expand(char *arg)
 	int				offset;
 	char			q_mode;
 
+	str = ft_strdup(str);
+	if (!str)
+		return (NULL); //check where remove_and_expand is called.
 	q_mode = 0;
 	offset = 0;
-	str = ft_strdup(str);
 	while (str[offset])
 	{
 		set_quote_mode(str[offset], &q_mode);
