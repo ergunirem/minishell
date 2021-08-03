@@ -26,7 +26,8 @@ SRCS	=	source/minishell.c \
 			source/environment/init_env.c \
 			source/environment/var.c \
 			source/expand/expand_param.c \
-			source/redirection/redirection_copy.c 
+			source/redirection/redirection_copy.c \
+			source/redirection/redirect_heredoc.c 
 # update later on the redirection
 
 OBJS	= $(SRCS:.c=.o)

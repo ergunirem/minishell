@@ -36,7 +36,7 @@ static int redirect_input(char c, char *file)
 // 	return (fd);
 // }
 
-t_token	*redirection(t_token *token, t_context *ctx)
+t_token	*redirection(t_token *token, t_context *ctx, int count)
 {
 	int	fd;
 	char	*file;
@@ -44,15 +44,18 @@ t_token	*redirection(t_token *token, t_context *ctx)
 	if (!token->next || !token->next->content)
 		return (NULL);//error as nothing follow the redirection operator
 	file = ft_strdup(token->next->content);
-	if(ft_strrchr(file, '$'))
+	if (token->type == CHAR_DLESS)//move the heredoc at the first place, as if EOF with quote, do not expand
+	{
+		ctx->fd[0] = exec_heredoc(token, file, ctx, count);
+		ctx->redir[0] = fd;
+		return (NULL);
+	}
+	if(ft_strrchr(file, '$'))//expansion
 		file = expand_param(file);
-	printf("file name is %s\n", file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
 		fd = redirect_output(token->type, file);
-		// printf("open fd is %d\n", fd);
-		ctx->redir[1] = fd;
-		// printf("redir[0] and redir[1] is %d %d\n", ctx->redir[0], ctx->redir[1]);
+		ctx->redir[count] = fd;
 		if (fd < 0)
 			return (NULL); //error when try to open file
 		else
@@ -64,7 +67,7 @@ t_token	*redirection(t_token *token, t_context *ctx)
 	if (token->type == CHAR_LESS)
 	{
 		fd = redirect_input(token->type, file);
-		ctx->redir[0] = fd;
+		ctx->redir[count] = fd;
 		if (fd < 0)
 			return (NULL); //error when try to open file
 		else
@@ -73,14 +76,6 @@ t_token	*redirection(t_token *token, t_context *ctx)
 			return (token->next->next);
 		}
 	}
-	// if (token->type == CHAR_LESS)
-	// {
-
-	// }
-	// if (token->type == CHAR_DLESS)
-	// {
-		
-	// }
 	free(file);
 }
 

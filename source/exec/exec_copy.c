@@ -48,6 +48,15 @@ static int	exec_node(t_tree_node *node, t_context *ctx, char **envp)
 		return (0);
 }
 
+static void close_redirection(int *fd, int count)
+{
+	while (count > 0)
+	{
+		close(fd[count - 1]);
+		count--;
+	}
+}
+
 static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
 {
 	int			p[2];
@@ -86,6 +95,9 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 
 	count = count_redirection(token, ctx);
 	// printf("count is %d and argc is %d\n", count, argc);
+	ctx->redir = malloc(count * sizeof(int));
+	if (!ctx->redir)
+		return (-1); //malloc fail on the allocation
 	if (count != -1)
 		argc = argc - count * 2;
 	else
@@ -95,11 +107,13 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		return (-1);
 	argv[argc] = NULL;
 	argc = 0;
+	count = 0;
 	while (token)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later. 
+			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later. 
+			count++;
 			// printf("after redirection ctx redir[0] redir[1] fd[0] and fd[1] and close is %d %d %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd[0], ctx->fd[1], ctx->fd_close);
 			// if (!token)
 			// 	return (-1);//later update error treat, this is error related to open input/output file
@@ -140,11 +154,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 			return (-1);
 	}
 	free_array(argv);
-	if (ctx->redir[0] > 0)
-	// {	printf("close %d\n", ctx->redir[0]);
-		close(ctx->redir[0]);
-	if (ctx->redir[1] > 0)
-	// {	printf("close %d\n", ctx->redir[1]);
-		close(ctx->redir[1]);
+	close_redirection(ctx->redir, count);
+	free(ctx->redir);
 	return (1);
 }

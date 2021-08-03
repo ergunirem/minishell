@@ -19,7 +19,10 @@ int	main(int argc, char **argv, char **envp)
 	while (keep_running)
 	{
 		line = readline("Minishell$ ");
-		add_history(line);
+		printf("Check\n");
+		if (line && *line)
+    		add_history (line);
+		// add_history(line);
 		tokens = NULL;
 		if (!lexer(line, &tokens))
 			continue ;
@@ -32,6 +35,11 @@ int	main(int argc, char **argv, char **envp)
 			free_tree(root);
 		}
 		free_tokens(&tokens);
+		if (line)
+		{
+			free(line);
+			line = NULL;
+		}
 	}
 	//do I need to free dynamically allocated list on global g_env? 	// free_env();
 	return (0);
