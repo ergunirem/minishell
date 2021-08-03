@@ -44,9 +44,16 @@ t_token	*redirection(t_token *token, t_context *ctx)
 	if (!token->next || !token->next->content)
 		return (NULL);//error as nothing follow the redirection operator
 	file = ft_strdup(token->next->content);
-	if(ft_strrchr(file, '$'))
-		file = remove_quotes_and_expand(file);
-	printf("file name is %s\n", file);
+	if (token->type == CHAR_DLESS)//move the heredoc at the first place, as if EOF with quote, do not expand
+	{
+		ctx->fd[0] = exec_heredoc(token, file, ctx, count);//check input if it is -1
+		ctx->redir[count] = ctx->fd[0];
+		if (token->next->next)
+			return (token->next->next);
+		else
+			return (NULL);
+	}
+	file = expand_param(file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
 		fd = redirect_output(token->type, file);
@@ -73,14 +80,6 @@ t_token	*redirection(t_token *token, t_context *ctx)
 			return (token->next->next);
 		}
 	}
-	// if (token->type == CHAR_LESS)
-	// {
-
-	// }
-	// if (token->type == CHAR_DLESS)
-	// {
-
-	// }
 	free(file);
 }
 

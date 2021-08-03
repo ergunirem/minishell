@@ -99,7 +99,8 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
+			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
+			count++;
 			// printf("after redirection ctx redir[0] redir[1] fd[0] and fd[1] and close is %d %d %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd[0], ctx->fd[1], ctx->fd_close);
 			// if (!token)
 			// 	return (-1);//later update error treat, this is error related to open input/output file

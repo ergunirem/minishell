@@ -20,7 +20,7 @@ int		exec_export(char **args, int argc, t_context *ctx);
 int		exec_unset(char **args, int argc, t_context *ctx);
 int		exec_echo(char **args, int argc, t_context *ctx);
 int		exec_exit(char **args, int argc, t_context *ctx);
-t_token	*redirection(t_token *token, t_context *ctx);
+t_token	*redirection(t_token *token, t_context *ctx, int count);
 int	count_redirection(t_token *token, t_context *ctx);
 
 #endif
