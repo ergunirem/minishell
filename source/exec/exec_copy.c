@@ -113,7 +113,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later. 
+			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
 			count++;
 			// printf("after redirection ctx redir[0] redir[1] fd[0] and fd[1] and close is %d %d %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd[0], ctx->fd[1], ctx->fd_close);
 			// if (!token)
@@ -122,9 +122,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		else
 		{
 			argv[argc] = ft_strdup(token->content);
-			printf("argv %d is %s\n", argc, argv[argc]);
-			if(ft_strrchr(argv[argc], '$'))
-				argv[argc] = expand_param(argv[argc]);//need to also apply to redirection file name
+			argv[argc] = remove_quotes_and_expand(argv[argc]);//need to also apply to redirection file name
 			argc++;
 			token = token->next;
 		}
