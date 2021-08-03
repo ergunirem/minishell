@@ -108,7 +108,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		else
 		{
 			argv[argc] = ft_strdup(token->content);
-			argv[argc] = remove_quotes_and_expand(argv[argc]); //need to also apply to redirection file name
+			argv[argc] = remove_quotes_and_expand(argv[argc]);//need to also apply to redirection file name
 			argc++;
 			token = token->next;
 		}

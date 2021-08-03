@@ -53,7 +53,7 @@ t_token	*redirection(t_token *token, t_context *ctx)
 		else
 			return (NULL);
 	}
-	file = expand_param(file);
+	file = remove_and_expand(file);
 	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
 	{
 		fd = redirect_output(token->type, file);
