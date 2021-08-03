@@ -6,11 +6,12 @@
 /*   By: icikrikc <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/25 20:27:15 by icikrikc      #+#    #+#                 */
-/*   Updated: 2020/11/17 14:15:27 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/07/28 14:16:59 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "libft.h"
 
 char	*ft_strdup(const char *src)
@@ -20,6 +21,8 @@ char	*ft_strdup(const char *src)
 	char	*copy;
 
 	len = ft_strlen(src);
+	if (len == 0)
+		return (NULL);
 	copy = (char *)malloc(sizeof(char) * (len + 1));
 	if (!copy)
 		return (NULL);

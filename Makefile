@@ -15,7 +15,7 @@ SRCS	=	source/minishell.c \
 			source/helper/free.c \
 			source/helper/list.c \
 			source/exec/exec_existing_prog.c\
-			source/exec/exec.c \
+			source/exec/exec_copy.c \
 			source/built_in/built_in.c \
 			source/built_in/cd_pwd.c \
 			source/built_in/env.c \
@@ -25,7 +25,10 @@ SRCS	=	source/minishell.c \
 			source/built_in/exit.c \
 			source/environment/init_env.c \
 			source/environment/var.c \
-			source/expand/expand_param.c
+			source/expand/expand_param.c \
+			source/redirection/redirection_copy.c \
+			source/redirection/redirect_heredoc.c 
+# update later on the redirection
 
 OBJS	= $(SRCS:.c=.o)
 

@@ -70,16 +70,3 @@ int	execute_existing_program(char **argument, char **envp)
 	return (0);
 }
 
-// void	redirection(char *redirect_in, char *redirect_out)
-// {
-// 	int	redirect_out_fd;
-// 	int	redirect_in_fd;
-
-// 	redirect_out_fd = open(redirect_out, O_CREAT | O_TRUNC | O_WRONLY); //depends on double or single > (output redirection to see if use flag TRUNC)
-// 	redirect_in_fd = open(redirect_in, O_CREAT | O_TRUNC | O_RDONLY); //depends on double or single > (output redirection to see if use flag TRUNC)
-// 	if (redirect_out_fd)//error check
-// 	dup2(redirect_out_fd, STDOUT_FILENO);//need to add error check
-// 	dup2(redirect_in_fd, STDIN_FILENO);//need to add error check
-// 	close(redirect_out_fd);//error check on close call
-// 	close(redirect_in_fd);//error check on close call
-// }

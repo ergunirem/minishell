@@ -95,6 +95,8 @@ bool	lexer(char *str, t_token **tokens)
 	int			i;
 
 	i = 0;
+	if (!str)
+		return (true);
 	while (str[i] != '\0')
 	{
 		while (ft_iswhitespace(str[i]))
