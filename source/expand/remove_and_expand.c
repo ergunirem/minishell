@@ -26,6 +26,8 @@ static int	get_var_name(char *str, int i, int *j)
 		return (0);
 	if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
 		(*j)++;
+	if (*j == 1 && !ft_isdigit(str[i + 1]))
+		return (0);
 	if (*j == 2)
 	{
 		while (ft_isalnum(str[i + *j]) || str[i + *j] == '_')
@@ -86,9 +88,9 @@ char	*remove_quotes_and_expand(char *arg)
 	int				offset;
 	char			q_mode;
 
-	str = ft_strdup(str);
+	str = ft_strdup(arg);
 	if (!str)
-		return (NULL); //check where remove_and_expand is called.
+		return (NULL);
 	q_mode = 0;
 	offset = 0;
 	while (str[offset])

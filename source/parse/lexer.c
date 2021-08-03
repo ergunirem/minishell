@@ -90,6 +90,8 @@ bool	lexer(char *str, t_token **tokens)
 	t_token		*new;
 	int			i;
 
+	if (!str)
+		return (false);
 	i = 0;
 	while (str[i] != '\0')
 	{

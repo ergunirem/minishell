@@ -47,6 +47,8 @@ void	free_array(char **array)
 
 void	free_var(t_pair_lst *var)
 {
+	if (!var)
+		return ;
 	free(var->key);
 	free(var->value);
 	free(var);
