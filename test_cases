@@ -262,6 +262,17 @@ exit exit ; echo if you see this message then your minishell have some troubles
 
 ##############
 
+##### error checking ####
+/afwef/afssef aw: Minishell: /afwef/afssef: No such file or directory
+pwd | wc | <aweew.txt grep h: Minishell: aweew.txt: No such file or directory
+
+##### redirection ####
+echo afwefe >$USER: create Xiaojing
+echo afwefe >'$USER' : create $USER
+echo afwefe >"$USER": create Xiaojing
+echo afwefe >'$USER'sfafawe | wc : should create a file $USERsfafawe
+echo afwefe >"$USER"sfafawe | wc : should create a file Xiaojingsfafawe
+
 
 ##  EXPANSION ##
 

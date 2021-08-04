@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include "../../include/minishell.h"
 
-static int redirect_output(char c, char *file)
+static int	redirect_output(char c, char *file)
 {
 	int	fd;
 
@@ -14,7 +14,7 @@ static int redirect_output(char c, char *file)
 	return (fd);
 }
 
-static int redirect_input(char c, char *file)
+static int	redirect_input(char c, char *file)
 {
 	int	fd;
 
@@ -23,55 +23,45 @@ static int redirect_input(char c, char *file)
 	return (fd);
 }
 
-t_token	*redirection(t_token *token, t_context *ctx, int count)
+int	redirection(t_token **token, t_context *ctx, int count)
 {
 	int	fd;
 	char	*file;
 
-	if (!token->next || !token->next->content)
-		return (NULL);//error as nothing follow the redirection operator
-	file = ft_strdup(token->next->content);
-	if (token->type == CHAR_DLESS)//move the heredoc at the first place, as if EOF with quote, do not expand
+	file = ft_strdup((*token)->next->content);
+	if ((*token)->type == CHAR_DLESS)//move the heredoc at the first place, as if EOF with quote, do not expand
 	{
-		ctx->fd[0] = exec_heredoc(token, file, ctx, count);//check input if it is -1
+		ctx->fd[0] = exec_heredoc(*token, file, ctx, count);//check input if it is -1
 		ctx->redir[count] = ctx->fd[0];
-		if (token->next->next)
-			return (token->next->next);
-		else
-			return (NULL);
+		(*token) = (*token)->next->next;
 	}
 	file = remove_quotes_and_expand(file);
-	if (token->type == CHAR_GREAT || token->type == CHAR_DGREAT)
+	if ((*token)->type == CHAR_GREAT || (*token)->type == CHAR_DGREAT)
 	{
-		fd = redirect_output(token->type, file);
+		fd = redirect_output((*token)->type, file);
 		ctx->redir[count] = fd;
 		if (fd < 0)
-		{
-			error_new_int(NULL, token->next->content, strerror(errno), 1);
-			return (NULL); //error when try to open file
-		}
+			return (error_new_bool(NULL, (*token)->next->content, strerror(errno), 1));
 		else
 		{
 			ctx->fd[1] = fd;
-			return (token->next->next);
+			(*token) = (*token)->next->next;
 		}
 	}
 	else
 	{
-		fd = redirect_input(token->type, file);
+		fd = redirect_input((*token)->type, file);
 		ctx->redir[count] = fd;
 		if (fd < 0)
-		{
-			error_new_int(NULL, token->next->content, strerror(errno), 1);
-			return (NULL); //error when try to open file
-		}
+			return (error_new_bool(NULL, (*token)->next->content, strerror(errno), 1));
 		else
 		{
 			ctx->fd[0] = fd;
-			return (token->next->next);
+			(*token) = (*token)->next->next;
 		}
 	}
 	free(file);
+	return (1);
 }
 
 int	count_redirection(t_token *token, t_context *ctx)

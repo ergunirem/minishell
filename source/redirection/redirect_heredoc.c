@@ -46,15 +46,6 @@ static void	without_expansion(char *delimiter, char *newline, int *fd)
 	free(delimiter);
 }
 
-// static int	elim_multiple_heredoc(t_token *token)
-// {
-// 	while (token)
-// 	{
-// 		if (token->type)
-// 			token = token->next;
-// 	}
-// }
-
 int	exec_heredoc(t_token *token, char *file, t_context *ctx, int count)
 {
 	char	*delimiter;
@@ -63,7 +54,6 @@ int	exec_heredoc(t_token *token, char *file, t_context *ctx, int count)
 	int		len;
 	int		fd[2];
 
-	// elim_multiple_heredoc(token);
 	delimiter = ft_strdup(token->next->content);
 	len = ft_strlen(delimiter);
 	if ((delimiter[0] == '\'' && delimiter[len - 1] == '\'')

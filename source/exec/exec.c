@@ -128,11 +128,9 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
+			if (redirection(&token, ctx, count) == 0)//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
+				return (0);
 			count++;
-			// printf("after redirection ctx redir[0] redir[1] fd[0] and fd[1] and close is %d %d %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd[0], ctx->fd[1], ctx->fd_close);
-			// if (!token)
-			// 	return (-1);//later update error treat, this is error related to open input/output file
 		}
 		else
 		{
@@ -145,15 +143,9 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	if (is_built_in(argv[0]))
 	{
 		exec_built_in(argv, argc, ctx, envp);
-		// printf("ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
-		// if (ctx->fd_close >= 0)
-		// {	printf("close %d\n", ctx->fd_close);
-		// 	close(ctx->fd_close);}
 		if (ctx->redir[0] > 0)
-		// {	printf("close %d\n", ctx->redir[0]);
 			close(ctx->redir[0]);
 		if (ctx->redir[1] > 0)
-		// {	printf("close %d\n", ctx->redir[1]);
 			close(ctx->redir[1]);
 		return (0);
 	}
@@ -163,18 +155,14 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		dup2(ctx->fd[0], 0);
 		dup2(ctx->fd[1], 1);
-		dup2(ctx->fd[2], 2); //stderr ?not sure?
+		dup2(ctx->fd[2], 2);
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
-		// if (execute_existing_program(argv, envp) == 0)
-		// 	return (0);//continue to next command without waiting.
 		if (execve(argv[0], argv, envp) == -1)
 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
 	}
 	free_array(argv);
-	// printf("ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
 	close_redirection(ctx->redir, count);
-	// printf("close fd is %d\n", ctx->fd_close);
 	free(ctx->redir);
 	return (1);
 }
