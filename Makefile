@@ -15,7 +15,7 @@ SRCS	=	source/minishell.c \
 			source/helper/free.c \
 			source/helper/list.c \
 			source/exec/exec_existing_prog.c\
-			source/exec/exec_copy.c \
+			source/exec/exec.c \
 			source/built_in/built_in.c \
 			source/built_in/cd_pwd.c \
 			source/built_in/env.c \
@@ -27,7 +27,7 @@ SRCS	=	source/minishell.c \
 			source/environment/var.c \
 			source/expand/remove_and_expand.c \
 			source/expand/just_expand.c \
-			source/redirection/redirection_copy.c \
+			source/redirection/redirection.c \
 			source/redirection/redirect_heredoc.c
 # update later on the redirection
 
