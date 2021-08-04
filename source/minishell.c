@@ -15,7 +15,8 @@ int	main(int argc, char **argv, char **envp)
 	t_token		*tokens;
 	t_tree_node	*root;
 
-	init_variables(envp);
+	if (init_env_variables(envp) == GENERAL_ERROR)
+		return (1);
 	while (keep_running)
 	{
 		line = readline("Minishell$ ");

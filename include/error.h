@@ -3,6 +3,11 @@
 
 # include <stdbool.h>
 
+# define GENERAL_ERROR 1
+# define SYNTAX_ERROR 2
+# define INCORRECT_USAGE 2
+# define ENV_ERROR 127
+
 # define MALLOC_ERROR "malloc failed"
 # define QUOTE_ERROR "unclosed quote"
 # define PIPE_ERROR_MSG "syntax error near unexpected token `|'"
