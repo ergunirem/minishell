@@ -25,8 +25,7 @@ int	main(int argc, char **argv, char **envp)
     		add_history (line);
 		// add_history(line);
 		tokens = NULL;
-		if (!lexer(line, &tokens))
-			continue ;
+		lexer(line, &tokens);
 		// print_tokens(tokens);
 		if (check_list(tokens))
 		{

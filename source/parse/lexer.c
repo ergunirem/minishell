@@ -49,10 +49,11 @@ static bool	tokenize_word(char *str, t_token *new, int *i)
 			(*i)++;
 	}
 	new->content = ft_substr(str, start, *i - start);
+	if(!new->content)
+		return (false);
 	new->type = CHAR_WORD;
 	if (str[*i] != '\0' && !ft_strchr("|<>", str[*i]))
 		*i = *i + 1;
-	// printf("IN %d\n", *i);
 	return (true);
 }
 
@@ -93,29 +94,23 @@ bool	lexer(char *str, t_token **tokens)
 	if (!str)
 		return (false);
 	i = 0;
-	if (!str)
-		return (true);
 	while (str[i] != '\0')
 	{
-		// printf("LEX:%d\n", i);
 		while (ft_iswhitespace(str[i]))
 			i++;
 		if (str[i] == '\0')
 			return (true);
 		new = initialize_token();
 		if (!new)
-			return (lexer_error(tokens, NULL, MALLOC_ERROR));
+			return (lexer_error(NULL, MALLOC_ERROR, "1"));
 		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
 			tokenize_special_char(str, new, &i);
 		else
 		{
 			if (!tokenize_word(str, new, &i))
-				return (lexer_error(tokens, new, QUOTE_ERROR));
+				return (lexer_error(new, QUOTE_ERROR, "2"));
 		}
-		// printf("what?\n");
-		// printf("INDEX:%d\n", i);
 		ft_listadd_back(tokens, new);
 	}
-	// printf("LAST-INDEX:%d\n", i);
 	return (true);
 }

@@ -29,7 +29,7 @@ int	create_or_update_env(char *arg, int fd_err)
 	}
 	if (find_env_var(g_env.env_vars, new->key))
 	{
-		update_var(g_env.env_vars, new->key, new->value);
+		update_var(new->key, new->value);
 		free_var(new);
 	}
 	else

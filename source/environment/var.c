@@ -15,11 +15,11 @@ t_pair_lst	*find_env_var(t_pair_lst *lst, char *var_name)
 	return (tmp);
 }
 
-void	update_var(t_pair_lst *lst, char *key, char *value)
+void	update_var(char *key, char *value)
 {
 	t_pair_lst *new;
 
-	new = find_env_var(lst, key);
+	new = find_env_var(g_env.env_vars, key);
 	free(new->value);
 	new->value = ft_strdup(value);
 }
