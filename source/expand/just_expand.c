@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   just_expand.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/05 20:58:12 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/05 20:59:50 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/expansion.h"
 #include "../../include/minishell.h"
 
@@ -7,7 +19,7 @@
 */
 static int	get_var_name(char *str, int i, int *j)
 {
-	if (str[i + 1] == '\0'|| str[i + 1] == '$' || str[i + 1] == '\"')
+	if (str[i + 1] == '\0' || str[i + 1] == '$' || str[i + 1] == '\"')
 		return (0);
 	if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
 		(*j)++;
@@ -37,14 +49,12 @@ static int	expand(char **str, int i)
 	int			j;
 
 	j = 1;
-	if (!get_var_name(*str, i, &j))
+	if (!get_var_name(*str, i, &j) && (*str)[i + 1] != '?')
 		return (i + 1);
-	// if (j == 1 && ft_index("?'\"", (*str)[i + j]) == -1)
-	// 	return (i + 1);
-	// if ((*str)[i + 1] == '?' && ++j)
-	// 	varname = ft_strdup("PIPESTATUS");
-	// else
-	var_name = ft_substr(*str, i + 1, j - 1);
+	if ((*str)[i + 1] == '?' && ++j)
+		var_name = ft_strdup("PIPESTATUS");
+	else
+		var_name = ft_substr(*str, i + 1, j - 1);
 	env_var = find_env_var(g_env.env_vars, var_name);
 	free(var_name);
 	if (!env_var)
@@ -60,13 +70,6 @@ static int	expand(char **str, int i)
 	return (i + ft_strlen(env_var->value) - 1);
 }
 
-/*
-**	First sets the qoute mode
-**	If a quote char, it removes it based on the qoute_removal rule
-**	If $ char, it calls the expand function unless q_mode is single qoute
-*/
-
-/* //error handling with mallocs? */
 char	*just_expand(char *arg)
 {
 	char			*str;
@@ -78,7 +81,7 @@ char	*just_expand(char *arg)
 	offset = 0;
 	while (str[offset])
 	{
- 		if (str[offset] == '$')
+		if (str[offset] == '$')
 			offset = expand(&str, offset) - 1;
 		offset++;
 	}
