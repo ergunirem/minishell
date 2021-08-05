@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   check.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/05 09:19:07 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/05 09:19:11 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 /*
@@ -55,8 +67,8 @@ bool	check_list(t_token *tokens)
 	if (!tokens)
 		return (false);
 	if (!check_pipe(tokens))
-		return (error_msg(PIPE_ERROR_MSG));
+		return (error_msg(PIPE_ERROR_MSG, SYNTAX_ERROR));
 	if (!check_redirection(tokens))
-		return (error_msg(REDIR_ERROR_MSG));
+		return (error_msg(REDIR_ERROR_MSG, SYNTAX_ERROR));
 	return (true);
 }

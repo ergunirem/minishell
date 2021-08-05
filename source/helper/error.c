@@ -1,10 +1,11 @@
 #include "../../include/minishell.h"
 
-bool	error_msg(char *msg)
+bool	error_msg(char *msg, char *error_code)
 {
 	ft_putstr_fd("Minishell: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
+	update_var("PIPESTATUS", error_code);
 	return (false);
 }
 
