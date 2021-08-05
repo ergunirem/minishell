@@ -108,7 +108,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	ctx->redir = malloc(count * sizeof(int));
 	if (!ctx->redir)
 	{
-		error_msg(strerror(errno));
+		error_msg(strerror(errno), "1");
 		return (-1); //malloc fail on the allocation
 	}
 	if (count != -1)
@@ -118,7 +118,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	argv = malloc((argc + 1) * sizeof(char *));
 	if (!argv)
 	{
-		error_msg(strerror(errno));
+		error_msg(strerror(errno), "1");
 		return (-1);
 	}
 	argv[argc] = NULL;

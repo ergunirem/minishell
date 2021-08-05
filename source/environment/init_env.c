@@ -33,7 +33,7 @@ int	add_env(char *envp)
 
 	new = create_key_value_pair(envp);
 	if (!new)
-		return (GENERAL_ERROR);
+		return (1);
 	ft_listadd_back((t_token **)&(g_env.env_vars), (t_token *)new);
 	return (0);
 }
@@ -45,10 +45,10 @@ int	init_env_variables(char **envp)
 	while (*envp)
 	{
 		if (add_env(*envp) == 1)
-			return (GENERAL_ERROR);
+			return (1);
 		envp++;
 	}
 	if (add_env("PIPESTATUS=0") == 1)
-		return (GENERAL_ERROR);
+		return (1);
 	return (0);
 }

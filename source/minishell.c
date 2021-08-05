@@ -15,14 +15,14 @@ int	main(int argc, char **argv, char **envp)
 	t_token		*tokens;
 	t_tree_node	*root;
 
-	if (init_env_variables(envp) == GENERAL_ERROR)
+	if (init_env_variables(envp) == 1)
 		return (1);
 	while (keep_running)
 	{
 		line = readline("Minishell$ ");
 		printf("Check\n");
 		if (line && *line)
-    		add_history (line);
+			add_history (line);
 		// add_history(line);
 		tokens = NULL;
 		lexer(line, &tokens);
