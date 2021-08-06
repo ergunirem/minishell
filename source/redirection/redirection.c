@@ -10,10 +10,10 @@ static int	redirect_output(t_token **token, t_context *ctx, int count)
 
 	file = ft_strdup((*token)->next->content);
 	if (!file)
-		return (error_msg(strerror(errno)));
+		return (error_msg(strerror(errno), "1"));
 	file = remove_quotes_and_expand(file);
 	if (!file)
-		return (error_msg(strerror(errno)));
+		return (error_msg(strerror(errno), "1"));
 	if ((*token)->type == CHAR_GREAT)
 		fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	else if ((*token)->type == CHAR_DGREAT)
@@ -38,10 +38,10 @@ static int	redirect_input(t_token **token, t_context *ctx, int count)
 
 	file = ft_strdup((*token)->next->content);
 	if (!file)
-		return (error_msg(strerror(errno)));
+		return (error_msg(strerror(errno), "1"));
 	file = remove_quotes_and_expand(file);
 	if (!file)
-		return (error_msg(strerror(errno)));
+		return (error_msg(strerror(errno), "1"));
 	fd = open(file, O_RDONLY);
 	ctx->redir[count] = fd;
 	if (fd < 0)
@@ -59,7 +59,7 @@ static int	redirect_heredoc(t_token **token, t_context *ctx, int count)
 {
 	ctx->fd[0] = exec_heredoc(*token, ctx, count);
 	if (ctx->fd[0] < 0)
-		return (error_msg(strerror(errno)));
+		return (error_msg(strerror(errno), "1"));
 	ctx->redir[count] = ctx->fd[0];
 	(*token) = (*token)->next->next;
 	return (1);

@@ -68,7 +68,7 @@ static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
 
 	if (pipe(p) == -1)
 	{
-		error_msg(strerror(errno));
+		error_msg(strerror(errno), "1");
 		return (-1);
 	}
 	children = 0;
@@ -199,14 +199,14 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	ctx->redir = malloc(count * sizeof(int));
 	if (!ctx->redir && count > 0)
 	{
-		error_msg(strerror(errno));
+		error_msg(strerror(errno), "1");
 		return (-1);
 	}
 	argc = argc - count * 2;
 	argv = malloc((argc + 1) * sizeof(char *));
 	if (!argv)
 	{
-		error_msg(strerror(errno));
+		error_msg(strerror(errno), "1");
 		return (-1);
 	}
 	argv[argc] = NULL;
