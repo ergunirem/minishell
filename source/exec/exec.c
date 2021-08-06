@@ -9,9 +9,10 @@
 static int	exec_node(t_tree_node *node, t_context *ctx, char **envp);
 static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp);
 static int	exec_command(t_tree_node *node, t_context *ctx, char **envp);
+// static int	exec_command2(char **argv, int argc, int count, t_context *ctx, char **envp);
 static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp);
 
-int	count_node(t_token *token)
+static int	count_node(t_token *token)
 {
 	int	i;
 
@@ -31,7 +32,6 @@ void	exec(t_tree_node *node, char **envp)
 
 	ctx = (t_context){{STDIN_FILENO, STDOUT_FILENO, 2}, -1, 0};
 	children = exec_node(node, &ctx, envp);
-	printf("children is %d\n", children);
 	while (children > 0)
 	{
 		wait(NULL);
@@ -49,7 +49,7 @@ static int	exec_node(t_tree_node *node, t_context *ctx, char **envp)
 		return (0);
 }
 
-static void close_redirection(int *fd, int count)
+static void	close_redirection(int *fd, int count)
 {
 	while (count > 0)
 	{
@@ -66,7 +66,11 @@ static int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
 	t_context	left_ctx;
 	t_context	right_ctx;
 
-	pipe(p);// add error check for pipe (if pipe(p) == -1)
+	if (pipe(p) == -1)
+	{
+		error_msg(strerror(errno));
+		return (-1);
+	}
 	children = 0;
 	left_ctx = *ctx;
 	left_ctx.fd[1] = p[1];
@@ -99,6 +103,93 @@ static int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 	return (exec_command2(node->data.cmd.tokens, argc, ctx, envp));
 }
 
+// static char	**parse_argv(t_token *token, t_context *ctx, char **argv)
+// {
+// 	int	count;
+// 	int	argc;
+
+// 	count = 0;
+// 	argc = 0;
+// 	while (token)
+// 	{
+// 		// if (token->type != CHAR_WORD && redirection(&token, ctx, count) == 0)
+// 		// 	return (NULL);
+// 		// else if (token->type != CHAR_WORD)
+// 		// 	count++;
+// 		if (token->type != CHAR_WORD)
+// 		{
+// 			if (redirection(&token, ctx, count) == 0)
+// 				return (0);
+// 			count++;
+// 		}
+// 		else
+// 		{
+// 			argv[argc] = ft_strdup(token->content);
+// 			if (!argv[argc])
+// 				return (error_msg_inclfree(strerror(errno), argv, argc + 1));
+// 			argv[argc] = remove_quotes_and_expand(argv[argc]);
+// 			if (!argv[argc])
+// 				return (error_msg_inclfree(strerror(errno), argv, argc + 1));
+// 			argc++;
+// 			token = token->next;
+// 		}
+// 	}
+// 	return (argv);
+// }
+
+// static int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
+// {
+// 	int		argc;
+// 	int		count;
+// 	char	**argv;
+
+// 	argc = count_node(node->data.cmd.tokens);
+// 	count = count_redirection(node->data.cmd.tokens, ctx);
+// 	ctx->redir = malloc(count * sizeof(int));
+// 	if (!ctx->redir && count > 0)
+// 	{
+// 		error_msg(strerror(errno));
+// 		return (-1);
+// 	}
+// 	argc = argc - count * 2;
+// 	argv = malloc((argc + 1) * sizeof(char *));
+// 	if (!argv)
+// 	{
+// 		error_msg(strerror(errno));
+// 		return (-1);
+// 	}
+// 	argv = parse_argv(node->data.cmd.tokens, ctx, argv);
+// 	if (!argv)
+// 		return (0);
+// 	return (exec_command2(argv, argc, count, ctx, envp));
+// }
+
+// static int	exec_command2(char **argv, int argc, int count, t_context *ctx, char **envp)
+// {
+// 	if (is_built_in(argv[0]))
+// 	{
+// 		exec_built_in(argv, argc, ctx, envp);
+// 		close_redirection(ctx->redir, count);
+// 		return (0);
+// 	}
+// 	if (check_existing_program(&argv, envp) == 0)
+// 		return (0);
+// 	if (fork() == FORK_CHILD)
+// 	{
+// 		dup2(ctx->fd[0], 0);
+// 		dup2(ctx->fd[1], 1);
+// 		dup2(ctx->fd[2], 2);
+// 		if (ctx->fd_close >= 0)
+// 			close(ctx->fd_close);
+// 		if (execve(argv[0], argv, envp) == -1)
+// 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
+// 	}
+// 	free_array(argv);
+// 	close_redirection(ctx->redir, count);
+// 	free(ctx->redir);
+// 	return (1);
+// }
+
 static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 {
 	char	**argv;
@@ -106,19 +197,16 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 
 	count = count_redirection(token, ctx);
 	ctx->redir = malloc(count * sizeof(int));
-	if (!ctx->redir)
+	if (!ctx->redir && count > 0)
 	{
-		error_msg(strerror(errno), "1");
-		return (-1); //malloc fail on the allocation
+		error_msg(strerror(errno));
+		return (-1);
 	}
-	if (count != -1)
-		argc = argc - count * 2;
-	else
-		return (-1);//check if needed, if lexer can make sure there is always content behind the redirection
+	argc = argc - count * 2;
 	argv = malloc((argc + 1) * sizeof(char *));
 	if (!argv)
 	{
-		error_msg(strerror(errno), "1");
+		error_msg(strerror(errno));
 		return (-1);
 	}
 	argv[argc] = NULL;
@@ -128,16 +216,14 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			token = redirection(token, ctx, count);//check redirection before allocating content. when there is redirection, NULL in the content of the token. #need to check about the expansion later.
+			if (redirection(&token, ctx, count) == 0)
+				return (0);
 			count++;
-			// printf("after redirection ctx redir[0] redir[1] fd[0] and fd[1] and close is %d %d %d %d %d\n", ctx->redir[0], ctx->redir[1], ctx->fd[0], ctx->fd[1], ctx->fd_close);
-			// if (!token)
-			// 	return (-1);//later update error treat, this is error related to open input/output file
 		}
 		else
 		{
 			argv[argc] = ft_strdup(token->content);
-			argv[argc] = remove_quotes_and_expand(argv[argc]);//need to also apply to redirection file name
+			argv[argc] = remove_quotes_and_expand(argv[argc]);
 			argc++;
 			token = token->next;
 		}
@@ -145,16 +231,7 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	if (is_built_in(argv[0]))
 	{
 		exec_built_in(argv, argc, ctx, envp);
-		// printf("ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
-		// if (ctx->fd_close >= 0)
-		// {	printf("close %d\n", ctx->fd_close);
-		// 	close(ctx->fd_close);}
-		if (ctx->redir[0] > 0)
-		// {	printf("close %d\n", ctx->redir[0]);
-			close(ctx->redir[0]);
-		if (ctx->redir[1] > 0)
-		// {	printf("close %d\n", ctx->redir[1]);
-			close(ctx->redir[1]);
+		close_redirection(ctx->redir, count);
 		return (0);
 	}
 	if (check_existing_program(&argv, envp) == 0)
@@ -163,18 +240,14 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 	{
 		dup2(ctx->fd[0], 0);
 		dup2(ctx->fd[1], 1);
-		dup2(ctx->fd[2], 2); //stderr ?not sure?
+		dup2(ctx->fd[2], 2);
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
-		// if (execute_existing_program(argv, envp) == 0)
-		// 	return (0);//continue to next command without waiting.
 		if (execve(argv[0], argv, envp) == -1)
 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
 	}
 	free_array(argv);
-	// printf("ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
 	close_redirection(ctx->redir, count);
-	// printf("close fd is %d\n", ctx->fd_close);
 	free(ctx->redir);
-	return (1);
+	// return (1);
 }
