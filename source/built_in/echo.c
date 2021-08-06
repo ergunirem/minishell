@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   echo.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/05 17:09:49 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/05 19:22:30 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/built_in.h"
 
 size_t	check_n_option(char *str)
@@ -15,7 +27,6 @@ size_t	check_n_option(char *str)
 echo utility writes any specified operands, separated by single blank (` ')
 and followed by a newline (`\n') character, to the standard output (fd = 1)
 */
-
 int	exec_echo(char **args, int argc, t_context *ctx)
 {
 	size_t	i;
@@ -23,7 +34,6 @@ int	exec_echo(char **args, int argc, t_context *ctx)
 
 	i = 1;
 	n_option = 0;
-	//variable display?
 	while (args[i] && args[i][0] == '-')
 	{
 		if (check_n_option(args[i] + 1) == 0)

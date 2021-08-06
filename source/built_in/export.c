@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   export.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/05 19:26:34 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/05 19:32:50 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/built_in.h"
 
 int	declare_env(t_context *ctx)
@@ -25,11 +37,12 @@ int	create_or_update_env(char *arg, int fd_err)
 	if (!ft_isname(new->key))
 	{
 		free_var(new);
-		return (error_new_int("export", arg, "not a valid identifier\n", fd_err));
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		return (error_new_int("export", arg, IDENTIFIER_ERR_MSG, fd_err));
 	}
 	if (find_env_var(g_env.env_vars, new->key))
 	{
-		update_var(g_env.env_vars, new->key, new->value);
+		update_var(new->key, new->value);
 		free_var(new);
 	}
 	else
@@ -43,24 +56,27 @@ int	create_or_update_env(char *arg, int fd_err)
 **	Errs on invalid identifier '-': export -x, export xyz-xyz
 **	Ignores vars if invalid variable name is given: export var@iable=x x=y
 */
-
 int	exec_export(char **args, int argc, t_context *ctx)
 {
 	int			i;
 
 	if (argc == 1)
-		return (declare_env(ctx)); //I did not sort?
+		return (declare_env(ctx));
 	i = 1;
 	while (args[i])
 	{
 		if (ft_strrchr(args[i], '-'))
-			return (error_new_int("export", args[i], IDENTIFIER_ERR_MSG, ctx->fd[2]));
+		{
+			update_var("PIPESTATUS", GENERAL_ERROR);
+			error_new_int("export", args[i], IDENTIFIER_ERR_MSG, ctx->fd[2]);
+			return (1);
+		}
 		if (!ft_strrchr(args[i], '='))
 		{
 			i++;
 			continue ;
 		}
-		create_or_update_env(args[i], ctx->fd[2]); //check if fails? no it goes on actually?
+		create_or_update_env(args[i], ctx->fd[2]);
 		i++;
 	}
 	return (0);

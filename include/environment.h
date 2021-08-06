@@ -25,24 +25,24 @@
 
 typedef struct s_pair_lst
 {
-	char	*key;
-	char	*value;
+	char				*key;
+	char				*value;
 	struct s_pair_lst	*next;
 }	t_pair_lst;
 
 typedef struct s_env
 {
 	t_pair_lst	*env_vars;
-	t_pair_lst	*shell_vars;
 }	t_env;
 
 extern t_env	g_env;
 
-int			init_variables(char **envp);
+int			init_env_variables(char **envp);
+int			add_env(char *envp);
 t_pair_lst	*find_env_var(t_pair_lst *lst, char *var_name);
 t_pair_lst	*create_key_value_pair(char *env_var);
-void	update_var(t_pair_lst *lst, char *key, char *value);
-void	remove_var(t_pair_lst **lst, char *key);
-void	free_var(t_pair_lst *var);
+void		update_var(char *key, char *value);
+void		remove_var(t_pair_lst **lst, char *key);
+void		free_var(t_pair_lst *var);
 
 #endif

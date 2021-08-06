@@ -1,10 +1,11 @@
 #include "../../include/minishell.h"
 
-bool	error_msg(char *msg)
+bool	error_msg(char *msg, char *error_code)
 {
 	ft_putstr_fd("Minishell: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
+	update_var("PIPESTATUS", error_code);
 	return (false);
 }
 
@@ -53,12 +54,16 @@ int		error_new_int(char *command, char *arg, char *msg, int fd)
 	return (1); //will it be -1 when incorporated into get_path error message
 }
 
-bool	lexer_error(t_token **tokens, t_token *new, char *msg)
+bool	lexer_error(t_token *new, char *msg, char *error_code)
 {
 	ft_putstr_fd("Minishell: error: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
-	free(new);
-	free_tokens(tokens);
+	update_var("PIPESTATUS", error_code);
+	if (new)
+	{
+		free(new->content);
+		free(new);
+	}
 	return (false);
 }

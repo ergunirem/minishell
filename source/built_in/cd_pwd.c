@@ -6,10 +6,12 @@ int	exec_pwd(t_context *ctx)
 
 	path = getcwd(NULL, 0);
 	if (!path)
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("pwd", "getcwd", strerror(errno), ctx->fd[2]));
+	}
 	ft_putstr_fd(path, ctx->fd[1]);
 	ft_putstr_fd("\n", ctx->fd[1]);
-	// printf("in pwd ctx fd[0] fd[1] and close is %d %d %d\n", ctx->fd[0], ctx->fd[1], ctx->fd_close);
 	free(path);
 	return (0);
 }
@@ -21,14 +23,32 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 
 	path = getcwd(NULL, 0);
 	if (!path)
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("cd", "getcwd", strerror(errno), fd_err));
+	}
 	env_var = find_env_var(lst, var_name);
 	free(env_var->value);
 	env_var->value = ft_strdup(path);
-	if (!env_var->value)
-		return (error_new_int("cd", "ft_stdrup", "Malloc failed\n", fd_err));
 	free(path);
-	return (true);
+	if (!env_var->value)
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		return (error_new_int("cd", "ft_stdrup", "Malloc failed\n", fd_err));
+	}
+	return (0);
+}
+
+static	int	just_cd_command(t_pair_lst	*env_var, t_context *ctx)
+{
+	env_var = find_env_var(g_env.env_vars, "HOME");
+	if (chdir(env_var->value) == -1)
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		error_new_int("cd", env_var->value, strerror(errno), ctx->fd[2]);
+		return (1);
+	}
+	return (0);
 }
 
 int	exec_cd(char **arguments, t_context *ctx)
@@ -39,21 +59,23 @@ int	exec_cd(char **arguments, t_context *ctx)
 	if (arguments[1] && ft_strncmp(arguments[1], "-", 2) == 0)
 	{
 		env_var = find_env_var(g_env.env_vars, "OLDPWD");
-		//prints out the oldpwd when cd -
 		tmp = ft_strdup(env_var->value);
 	}
 	change_dir_var(g_env.env_vars, "OLDPWD", ctx->fd[2]);
 	if (!arguments[1])
 	{
-		env_var = find_env_var(g_env.env_vars, "HOME");
-		if (chdir(env_var->value) == -1)
-			return (error_new_int("cd", env_var->value, strerror(errno), ctx->fd[2]));
-		return(change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
+		just_cd_command(env_var, ctx);
+		return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
 	}
 	if (ft_strncmp(arguments[1], "-", 2) != 0)
-		tmp = ft_strtrim(arguments[1], "\""); //any issue with using both " and '
+		tmp = ft_strdup(arguments[1]);
 	if (chdir(tmp) == -1)
-		return (error_new_int("cd", tmp, strerror(errno), ctx->fd[2]));
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		error_new_int("cd", tmp, strerror(errno), ctx->fd[2]);
+		free(tmp);
+		return (1);
+	}
 	free(tmp);
 	return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
 }

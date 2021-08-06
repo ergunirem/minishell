@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   exit.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/05 20:04:35 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/05 20:04:36 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/built_in.h"
 
 int	check_numeric(char *str)
@@ -22,19 +34,19 @@ int	exec_exit(char **args, int argc, t_context *ctx)
 {
 	int	exit_code;
 
-	//exit_code to be reach everywhere?
 	exit_code = 0;
 	if (argc > 2)
 	{
-		exit_code = error_new_int("exit", NULL, "too many arguments", ctx->fd[2]);
-		return (exit_code);
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		return (error_new_int("exit", NULL, MANY_ARG_ERR_MSG, ctx->fd[2]));
 	}
-	if(args[1])
+	if (args[1])
 	{
-		if (!check_numeric(args[1])) //bash still logs out!
+		if (!check_numeric(args[1]))
 		{
-			error_new_int("exit", NULL, "numeric argument required", ctx->fd[2]);
-			exit_code = 2; //use macro - specific codes for errors?
+			error_new_int("exit", args[1], NUMERIC_ERROR, ctx->fd[2]);
+			exit_code = 2;
+			exit(exit_code % 256);
 		}
 		if (exit_code != 2)
 			exit_code = ft_atoi(args[1]);
