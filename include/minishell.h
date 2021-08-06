@@ -15,6 +15,7 @@
 # include "built_in.h"
 # include "environment.h"
 # include "expansion.h"
+# include "signal.h"
 # include <stdbool.h>
 # include <string.h>
 # include <errno.h>

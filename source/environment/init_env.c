@@ -42,6 +42,7 @@ int	init_env_variables(char **envp)
 {
 	t_pair_lst	*new;
 
+	g_env.envp = envp;
 	while (*envp)
 	{
 		if (add_env(*envp) == 1)
