@@ -8,6 +8,15 @@ bool	error_msg(char *msg)
 	return (false);
 }
 
+char	**error_msg_inclfree(char *msg, char **argv, int argc)
+{
+	free_array2(argv, argc);
+	ft_putstr_fd("Minishell: ", 1);
+	ft_putstr_fd(msg, 1);
+	ft_putstr_fd("\n", 1);
+	return (NULL);
+}
+
 bool	error_new_bool(char *command, char *arg, char *msg, int fd)
 {
 	ft_putstr_fd("Minishell: ", fd);

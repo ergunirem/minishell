@@ -46,7 +46,15 @@ static void	without_expansion(char *delimiter, char *newline, int *fd)
 	free(delimiter);
 }
 
-int	exec_heredoc(t_token *token, char *file, t_context *ctx, int count)
+static void	free_two(char *a, char *b)
+{
+	if (a)
+		free(a);
+	else
+		free(b);
+}
+
+int	exec_heredoc(t_token *token, t_context *ctx, int count)
 {
 	char	*delimiter;
 	char	*new_delimiter;
@@ -55,19 +63,22 @@ int	exec_heredoc(t_token *token, char *file, t_context *ctx, int count)
 	int		fd[2];
 
 	delimiter = ft_strdup(token->next->content);
+	if (!delimiter)
+		return (-1);
+	new_delimiter = NULL;
 	len = ft_strlen(delimiter);
 	if ((delimiter[0] == '\'' && delimiter[len - 1] == '\'')
 		|| (delimiter[0] == '\"' && delimiter[len - 1] == '\"'))
 		new_delimiter = ft_substr(delimiter, 1, len - 2);
 	if (pipe(fd) == -1)
-		return (-1); //error as pipe error
+		return (-1);
 	newline = readline(">");
 	if ((delimiter[0] == '\'' && delimiter[len - 1] == '\'')
 		|| (delimiter[0] == '\"' && delimiter[len - 1] == '\"'))
 		without_expansion(new_delimiter, newline, fd);
 	else
 		with_expansion(delimiter, newline, fd);
-	free(delimiter);
+	free_two(new_delimiter, delimiter);
 	close(fd[1]);
 	return (fd[0]);
 }

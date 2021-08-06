@@ -19,7 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	while (keep_running)
 	{
 		line = readline("Minishell$ ");
-		printf("Check\n");
+		// printf("Check\n");
 		if (line && *line)
     		add_history (line);
 		// add_history(line);

@@ -20,6 +20,7 @@
 # include <errno.h>
 
 void	free_array(char **array);
+void	free_array2(char **array, int n);
 int	check_existing_program(char ***argument, char **envp);
 void	ft_listadd_back(t_token **lst, t_token *new);
 void	exec(t_tree_node *node, char **envp);

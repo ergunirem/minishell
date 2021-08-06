@@ -1,5 +1,5 @@
-#include <stdlib.h> //for getenv
-#include <sys/stat.h> //for lstat
+#include <stdlib.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -15,7 +15,7 @@ static int	get_path(char *str, char **full_path)
 	path = getenv("PATH");
 	paths = ft_split(path, ':');
 	if (!paths)
-		return (error_new_bool(NULL, NULL, strerror(errno), 1));//return 0
+		return (error_new_bool(NULL, NULL, strerror(errno), 1));
 	i = 0;
 	while (paths[i])
 	{

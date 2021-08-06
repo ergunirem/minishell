@@ -47,6 +47,21 @@ void	free_array(char **array)
 	free(array);
 }
 
+void	free_array2(char **array, int n)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (i < n)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
 void	free_var(t_pair_lst *var)
 {
 	if (!var)

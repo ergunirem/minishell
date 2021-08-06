@@ -14,5 +14,6 @@ bool	error_msg(char *msg);
 bool	error_new_bool(char *command, char *arg, char *msg, int fd);
 int		error_new_int(char *command, char *arg, char *msg, int fd);
 bool	lexer_error(t_token **tokens, t_token *new, char *msg);
+char	**error_msg_inclfree(char *msg, char **argv, int argc);
 
 #endif

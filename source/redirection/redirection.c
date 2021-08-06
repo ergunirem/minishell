@@ -3,64 +3,85 @@
 #include <fcntl.h>
 #include "../../include/minishell.h"
 
-static int	redirect_output(char c, char *file)
+static int	redirect_output(t_token **token, t_context *ctx, int count)
 {
-	int	fd;
+	int		fd;
+	char	*file;
 
-	if (c == CHAR_GREAT)
+	file = ft_strdup((*token)->next->content);
+	if (!file)
+		return (error_msg(strerror(errno)));
+	file = remove_quotes_and_expand(file);
+	if (!file)
+		return (error_msg(strerror(errno)));
+	if ((*token)->type == CHAR_GREAT)
 		fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	else if (c == CHAR_DGREAT)
+	else if ((*token)->type == CHAR_DGREAT)
 		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	return (fd);
+	ctx->redir[count] = fd;
+	if (fd < 0)
+		return (error_new_bool(NULL,
+				(*token)->next->content, strerror(errno), 1));
+	else
+	{
+		ctx->fd[1] = fd;
+		(*token) = (*token)->next->next;
+	}
+	free(file);
+	return (1);
 }
 
-static int	redirect_input(char c, char *file)
+static int	redirect_input(t_token **token, t_context *ctx, int count)
 {
-	int	fd;
+	int		fd;
+	char	*file;
 
-	if (c == CHAR_LESS)
-		fd = open(file, O_RDONLY);
-	return (fd);
+	file = ft_strdup((*token)->next->content);
+	if (!file)
+		return (error_msg(strerror(errno)));
+	file = remove_quotes_and_expand(file);
+	if (!file)
+		return (error_msg(strerror(errno)));
+	fd = open(file, O_RDONLY);
+	ctx->redir[count] = fd;
+	if (fd < 0)
+		return (error_new_bool(NULL,
+				(*token)->next->content, strerror(errno), 1));
+	else
+	{
+		ctx->fd[0] = fd;
+		(*token) = (*token)->next->next;
+	}
+	return (1);
+}
+
+static int	redirect_heredoc(t_token **token, t_context *ctx, int count)
+{
+	ctx->fd[0] = exec_heredoc(*token, ctx, count);
+	if (ctx->fd[0] < 0)
+		return (error_msg(strerror(errno)));
+	ctx->redir[count] = ctx->fd[0];
+	(*token) = (*token)->next->next;
+	return (1);
 }
 
 int	redirection(t_token **token, t_context *ctx, int count)
 {
-	int	fd;
+	int		fd;
 	char	*file;
 
-	file = ft_strdup((*token)->next->content);
-	if ((*token)->type == CHAR_DLESS)//move the heredoc at the first place, as if EOF with quote, do not expand
-	{
-		ctx->fd[0] = exec_heredoc(*token, file, ctx, count);//check input if it is -1
-		ctx->redir[count] = ctx->fd[0];
-		(*token) = (*token)->next->next;
-	}
-	file = remove_quotes_and_expand(file);
+	if ((*token)->type == CHAR_DLESS)
+		return (redirect_heredoc(token, ctx, count));
 	if ((*token)->type == CHAR_GREAT || (*token)->type == CHAR_DGREAT)
 	{
-		fd = redirect_output((*token)->type, file);
-		ctx->redir[count] = fd;
-		if (fd < 0)
-			return (error_new_bool(NULL, (*token)->next->content, strerror(errno), 1));
-		else
-		{
-			ctx->fd[1] = fd;
-			(*token) = (*token)->next->next;
-		}
+		if (redirect_output(token, ctx, count) == 0)
+			return (0);
 	}
 	else
 	{
-		fd = redirect_input((*token)->type, file);
-		ctx->redir[count] = fd;
-		if (fd < 0)
-			return (error_new_bool(NULL, (*token)->next->content, strerror(errno), 1));
-		else
-		{
-			ctx->fd[0] = fd;
-			(*token) = (*token)->next->next;
-		}
+		if (redirect_input(token, ctx, count) == 0)
+			return (0);
 	}
-	free(file);
 	return (1);
 }
 
