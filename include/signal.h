@@ -6,5 +6,6 @@
 
 void	handle_parent_signal(int sig);
 void	handle_child_signal(int sig);
+int		handle_ctrl_d(void);
 
 #endif

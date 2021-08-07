@@ -1,25 +1,57 @@
-#include "../include/signal.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   signal.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/07 22:05:07 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/07 22:20:12 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/signal.h"
 
 /*
-**	if detect [ctrl-c] during terminal input:
-**	---- dis-regard previous input (clear buf), give a new prompt.
+**	if ctrl-\ (SIGQUIT) is received
+		regenerates the prompt
+		displays readline again to receive input
+**	if ctrl-c (SIGINT) is received,
+		moves to a new line, regenerates the prompt on a newline
+		clears the previous text, displays readline again to receive input.
 */
-// void	handle_parent_signal(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		ft_putstr_fd("\n", 2);
-// 	}
-// }
+void	handle_parent_signal(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		update_var("PIPESTATUS", "131");
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	if (sig == SIGINT)
+	{
+		update_var("PIPESTATUS", "130");
+		ft_putstr_fd("\n", 1);
+		rl_replace_line("", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
 
 /*
-**	if detect [ctrl-c] during child process:
-**	---- no new prompt print as it's been done by parent process.
+**	if ctrl-c (SIGINT) is received, no new prompt.
+**	it's already done by the parent process's handle.
 */
-// void	handle_child_signal(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		g_env.prompt.ctrl_c = 1;
-// 	}
-// }
+void	handle_child_signal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putstr_fd("CHILD\n", 1);
+	}
+}
+
+int	handle_ctrl_d(void)
+{
+	ft_putstr_fd("exit\n", 2);
+	return (1);
+}

@@ -26,5 +26,4 @@ int	check_existing_program(char ***argument, char **envp);
 void	ft_listadd_back(t_token **lst, t_token *new);
 void	exec(t_tree_node *node, char **envp);
 
-
 #endif

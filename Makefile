@@ -28,7 +28,8 @@ SRCS	=	source/minishell.c \
 			source/expand/remove_and_expand.c \
 			source/expand/just_expand.c \
 			source/redirection/redirection.c \
-			source/redirection/redirect_heredoc.c
+			source/redirection/redirect_heredoc.c \
+			source/signal/signal.c \
 # update later on the redirection
 
 OBJS	= $(SRCS:.c=.o)
@@ -50,13 +51,17 @@ all:	$(NAME)
 
 $(NAME):	$(OBJS)
 	$(MAKE) bonus -C $(LIBFT_DIR)
-	$(GCC) $(FLAGS) -o $(NAME) $(OBJS) $(LIBFT_DIR)/$(LIBFT_LIB) -lreadline
+	$(GCC) $(FLAGS) -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -lreadline -o $(NAME) $(OBJS) $(LIBFT_DIR)/$(LIBFT_LIB)
 	@echo "$(GREEN)Minishell:Successfully compiled!$(NORMAL)"
 
 %.o: %.c $(HEADER_FILE)
 	@echo "$(YELLOW)Compiling minishell...$(NORMAL)"
-	$(GCC) -c $< -o $(<:.c=.o)
+	$(GCC) -c $< -I/usr/local/opt/readline/include   -o  $(<:.c=.o)
 
+# $(NAME): $(SRCS)
+# 	@echo "Building..."
+# 	$(MAKE) bonus -C $(LIBFT_DIR)
+# 	@gcc $(CFLAG) -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -lreadline $(SRCS) -o $(NAME)
 
 clean:
 	@echo "$(RED)Removing object files...$(NORMAL)"

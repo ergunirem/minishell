@@ -33,8 +33,6 @@ typedef struct s_pair_lst
 typedef struct s_env
 {
 	t_pair_lst	*env_vars;
-	char		*line;
-	char		**envp;
 }	t_env;
 
 extern t_env	g_env;
