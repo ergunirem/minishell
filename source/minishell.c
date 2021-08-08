@@ -18,6 +18,8 @@ int	main(int argc, char **argv, char **envp)
 		// printf("Check\n");
 		if(!line)
 			return (handle_ctrl_d());
+		printf("%d\n", g_env.is_forked);
+		write(1,"IN\n", 3);
 		add_history(line);
 		tokens = NULL;
 		lexer(line, &tokens);

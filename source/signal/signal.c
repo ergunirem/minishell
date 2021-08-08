@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/07 22:05:07 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/07 22:20:12 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 10:51:20 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,28 @@
 */
 void	handle_parent_signal(int sig)
 {
-	if (sig == SIGQUIT)
+	write(1, &g_env.is_forked, 1);
+	if (sig == SIGQUIT && g_env.is_forked == 0)
 	{
 		update_var("PIPESTATUS", "131");
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	if (sig == SIGINT)
+	if (sig == SIGINT && g_env.is_forked == 0)
 	{
 		update_var("PIPESTATUS", "130");
 		ft_putstr_fd("\n", 1);
 		rl_replace_line("", 1);
 		rl_on_new_line();
 		rl_redisplay();
+	}
+	if (sig == SIGINT && g_env.is_forked == 1)
+	{
+		// update_var("PIPESTATUS", "130");
+		ft_putstr_fd("CHILD\n", 1);
+		// rl_replace_line("", 1);
+		// rl_on_new_line();
+		// rl_redisplay();
 	}
 }
 
@@ -44,10 +53,8 @@ void	handle_parent_signal(int sig)
 */
 void	handle_child_signal(int sig)
 {
-	if (sig == SIGINT)
-	{
-		ft_putstr_fd("CHILD\n", 1);
-	}
+	int i;
+	i = 0;
 }
 
 int	handle_ctrl_d(void)

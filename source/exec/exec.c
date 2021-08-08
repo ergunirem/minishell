@@ -238,8 +238,11 @@ static int	exec_command2(t_token *token, int argc, t_context *ctx, char **envp)
 		return (0);
 	if (fork() == FORK_CHILD)
 	{
-		signal(SIGINT, handle_child_signal);
-		signal(SIGQUIT, handle_child_signal);
+		// signal(SIGINT, handle_child_signal);
+		// signal(SIGQUIT, handle_child_signal);
+		g_env.is_forked = 1;
+		write(1, &g_env.is_forked, 1);
+		printf("%d\n", g_env.is_forked);
 		dup2(ctx->fd[0], 0);
 		dup2(ctx->fd[1], 1);
 		dup2(ctx->fd[2], 2);
