@@ -15,6 +15,29 @@ t_pair_lst	*find_env_var(t_pair_lst *lst, char *var_name)
 	return (tmp);
 }
 
+void	set_var(char *key, char *value)
+{
+	t_pair_lst	*new;
+
+	new = find_env_var(g_env.env_vars, key);
+	if (new)
+		update_var(key, value);
+	else
+	{
+		new = malloc(sizeof(t_pair_lst));
+		if (!new)
+			return ;
+		new->next = NULL;
+		new->key = ft_strdup(key);
+		if (!new->key)
+			return ;
+		new->value = ft_strdup(value);
+		if (!new->value)
+			return ;
+		ft_listadd_back((t_token **)&(g_env.env_vars), (t_token *)new);
+	}
+}
+
 void	update_var(char *key, char *value)
 {
 	t_pair_lst	*new;

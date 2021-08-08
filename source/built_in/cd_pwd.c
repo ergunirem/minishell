@@ -28,13 +28,18 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 		return (error_new_int("cd", "getcwd", strerror(errno), fd_err));
 	}
 	env_var = find_env_var(lst, var_name);
-	free(env_var->value);
-	env_var->value = ft_strdup(path);
-	free(path);
-	if (!env_var->value)
+	if (!env_var)
+		set_var(var_name, path);
+	else
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
-		return (error_new_int("cd", "ft_stdrup", "Malloc failed\n", fd_err));
+		free(env_var->value);
+		env_var->value = ft_strdup(path);
+		free(path);
+		if (!env_var->value)
+		{
+			update_var("PIPESTATUS", GENERAL_ERROR);
+			return (error_new_int("cd", "ft_stdrup", "Malloc failed\n", fd_err));
+		}
 	}
 	return (0);
 }
@@ -48,7 +53,7 @@ static	int	just_cd_command(t_pair_lst	*env_var, t_context *ctx)
 		error_new_int("cd", env_var->value, strerror(errno), ctx->fd[2]);
 		return (1);
 	}
-	return (0);
+	return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
 }
 
 int	exec_cd(char **arguments, t_context *ctx)
@@ -56,17 +61,16 @@ int	exec_cd(char **arguments, t_context *ctx)
 	t_pair_lst	*env_var;
 	char		*tmp;
 
+	tmp = NULL;
 	if (arguments[1] && ft_strncmp(arguments[1], "-", 2) == 0)
 	{
 		env_var = find_env_var(g_env.env_vars, "OLDPWD");
-		tmp = ft_strdup(env_var->value);
+		if (env_var)
+			tmp = ft_strdup(env_var->value);
 	}
 	change_dir_var(g_env.env_vars, "OLDPWD", ctx->fd[2]);
 	if (!arguments[1])
-	{
-		just_cd_command(env_var, ctx);
-		return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
-	}
+		return (just_cd_command(env_var, ctx));
 	if (ft_strncmp(arguments[1], "-", 2) != 0)
 		tmp = ft_strdup(arguments[1]);
 	if (chdir(tmp) == -1)

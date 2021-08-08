@@ -57,7 +57,8 @@ static int	check_buildin(char **argv, t_context *ctx, int *argc, char **envp)
 {
 	if (is_built_in(argv[0]))
 	{
-		exec_built_in(argv, argc[0], ctx, envp);
+		if (exec_built_in(argv, argc[0], ctx, envp) == 0)
+			update_var("PIPESTATUS", SUCCESS);
 		close_redirection(ctx->redir, argc[1]);
 		free_array(argv);
 		free(ctx->redir);

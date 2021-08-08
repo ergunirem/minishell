@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/07 22:05:07 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/08 12:37:59 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/08 23:38:24 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ void	handle_parent_signal(int sig)
 void	handle_child_signal(int sig)
 {
 	int i;
+
 	i = 0;
 }
 
 int	handle_ctrl_d(void)
 {
 	ft_putstr_fd("exit\n", 2);
-	return (1);
+	exit(1);
 }

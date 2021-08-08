@@ -19,7 +19,7 @@ bool	is_built_in(char *cmd)
 	return (false);
 }
 
-bool	exec_built_in(char **args, int argc, t_context *ctx, char **envp)
+int	exec_built_in(char **args, int argc, t_context *ctx, char **envp)
 {
 	if (ft_strncmp(args[0], "cd", 3) == 0)
 		return (exec_cd(args, ctx));
@@ -35,5 +35,5 @@ bool	exec_built_in(char **args, int argc, t_context *ctx, char **envp)
 		return (exec_echo(args, argc, ctx));
 	if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (exec_exit(args, argc, ctx));
-	return (false);
+	return (1);
 }

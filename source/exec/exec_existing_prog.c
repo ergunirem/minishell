@@ -45,7 +45,11 @@ int	check_existing_program(char ***argument, char **envp)
 		if (!result)
 			return (0);
 		if (result == -1)
+		{
+			update_var("PIPESTATUS", "127");
 			return (error_new_bool(*argument[0], NULL, "command not found", 1));
+		}
+		update_var("PIPESTATUS", SUCCESS);
 		free(*argument[0]);
 		free(semi_path);
 		*argument[0] = full_path;

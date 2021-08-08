@@ -20,9 +20,13 @@
 */
 void	indent(size_t spaces)
 {
-	for (size_t i = 0; i < spaces; i++)
+	size_t	i;
+
+	i = 0;
+	while (i < spaces)
 	{
 		putchar(' ');
+		i++;
 	}
 }
 

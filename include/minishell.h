@@ -7,7 +7,6 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <signal.h>
 # include <sys/wait.h>
 # include "token.h"
 # include "parser.h"
