@@ -15,6 +15,7 @@
 # include "built_in.h"
 # include "environment.h"
 # include "expansion.h"
+# include "signal.h"
 # include <stdbool.h>
 # include <string.h>
 # include <errno.h>
@@ -24,6 +25,5 @@ void	free_array2(char **array, int n);
 int	check_existing_program(char ***argument, char **envp);
 void	ft_listadd_back(t_token **lst, t_token *new);
 void	exec(t_tree_node *node, char **envp);
-
 
 #endif

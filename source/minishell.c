@@ -1,29 +1,26 @@
 #include "../include/minishell.h"
 
-static volatile sig_atomic_t	keep_running = 1; //2 global vars?
 t_env	g_env;
-
-void	inthandler(int _)
-{
-	(void)_;
-	keep_running = 0;
-}
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
-	t_token		*tokens;
-	t_tree_node	*root;
+	t_token *tokens;
+	t_tree_node *root;
 
 	if (init_env_variables(envp) == 1)
 		return (1);
-	while (keep_running)
+	signal(SIGINT, handle_parent_signal);
+	signal(SIGQUIT, handle_parent_signal);
+	while (1)
 	{
 		line = readline("Minishell$ ");
 		// printf("Check\n");
-		if (line && *line)
-			add_history (line);
-		// add_history(line);
+		if(!line)
+			return (handle_ctrl_d());
+		printf("%d\n", g_env.is_forked);
+		write(1,"IN\n", 3);
+		add_history(line);
 		tokens = NULL;
 		lexer(line, &tokens);
 		// print_tokens(tokens);
