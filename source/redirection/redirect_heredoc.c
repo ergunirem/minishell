@@ -43,15 +43,16 @@ static void	without_expansion(char *delimiter, char *newline, int *fd)
 		newline = readline(">");
 	}
 	free(newline);
-	free(delimiter);
 }
 
 static void	free_two(char *a, char *b)
 {
 	if (a)
 		free(a);
-	else
+	else if (b)
 		free(b);
+	else
+		return ;
 }
 
 int	exec_heredoc(t_token *token, t_context *ctx, int count)

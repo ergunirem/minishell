@@ -10,7 +10,7 @@ typedef enum e_TokenType{
 	CHAR_GREAT = 'G',
 	CHAR_DGREAT = 'H',
 	CHAR_WORD = 'W',
-} t_TokenType;
+}	t_TokenType;
 
 typedef struct s_token
 {

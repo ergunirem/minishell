@@ -6,11 +6,12 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/07 22:05:07 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/08 10:51:20 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 12:37:59 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/signal.h"
+#include<stdio.h>
 
 /*
 **	if ctrl-\ (SIGQUIT) is received

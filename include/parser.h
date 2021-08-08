@@ -28,7 +28,7 @@
 typedef enum e_node_type{
 	CMD_NODE = 1,
 	PIPE_NODE = 2,
-} t_node_type;
+}	t_node_type;
 
 typedef struct s_pipe_node
 {
@@ -41,17 +41,17 @@ typedef struct s_cmd_node
 	t_token	*tokens;
 }	t_cmd_node;
 
-typedef union s_node_value
+typedef union u_node_value
 {
 	t_pipe_node	pipe;
 	t_cmd_node	cmd;
-} t_node_value;
+}	t_node_value;
 
 typedef struct s_tree_node
 {
 	t_node_type		type;
 	t_node_value	data;
-} t_tree_node;
+}	t_tree_node;
 
 bool		check_list(t_token *tokens);
 t_tree_node	*parser(t_token **tokens);

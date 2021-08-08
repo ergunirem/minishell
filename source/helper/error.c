@@ -36,7 +36,7 @@ bool	error_new_bool(char *command, char *arg, char *msg, int fd)
 	return (false);
 }
 
-int		error_new_int(char *command, char *arg, char *msg, int fd)
+int	error_new_int(char *command, char *arg, char *msg, int fd)
 {
 	ft_putstr_fd("Minishell: ", fd);
 	if (command)
@@ -51,7 +51,7 @@ int		error_new_int(char *command, char *arg, char *msg, int fd)
 	}
 	ft_putstr_fd(msg, fd);
 	ft_putstr_fd("\n", fd);
-	return (1); //will it be -1 when incorporated into get_path error message
+	return (1);
 }
 
 bool	lexer_error(t_token *new, char *msg, char *error_code)

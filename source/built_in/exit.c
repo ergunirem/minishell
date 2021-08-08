@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 20:04:35 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/05 20:04:36 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 16:42:02 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	exec_exit(char **args, int argc, t_context *ctx)
 		if (exit_code != 2)
 			exit_code = ft_atoi(args[1]);
 	}
-	//free_all?
 	ft_putstr_fd("exit\n", ctx->fd[2]);
 	exit(exit_code % 256);
 }

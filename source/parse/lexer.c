@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/06 11:59:21 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/06 11:59:28 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 16:33:35 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	check_quote(char *str, int *i)
 {
 	char	quote;
 
-	while(str[*i] == '\'' || str[*i] == '\"')
+	while (str[*i] == '\'' || str[*i] == '\"')
 	{
 		quote = str[*i];
 		*i = *i + 1;
@@ -50,18 +50,18 @@ static bool	tokenize_word(char *str, t_token *new, int *i)
 	start = *i;
 	while (str[*i] != ' ' && str[*i] != '\0')
 	{
-		if(ft_strchr("|<>", str[*i]))
+		if (ft_strchr("|<>", str[*i]))
 			break ;
-		if(ft_strchr("\'\"", str[*i]))
+		if (ft_strchr("\'\"", str[*i]))
 		{
-			if(!check_quote(str, i))
+			if (!check_quote(str, i))
 				return (false);
 		}
 		else
 			(*i)++;
 	}
 	new->content = ft_substr(str, start, *i - start);
-	if(!new->content)
+	if (!new->content)
 		return (false);
 	new->type = CHAR_WORD;
 	if (str[*i] != '\0' && !ft_strchr("|<>", str[*i]))

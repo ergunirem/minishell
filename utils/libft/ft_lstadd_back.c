@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/17 13:15:52 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/06/29 16:48:11 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 16:48:25 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_list *last;
+	t_list	*last;
 
 	if (new && *lst)
 	{

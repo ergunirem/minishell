@@ -2,11 +2,11 @@
 # define MINISHELL_H
 
 # include "../utils/libft/libft.h"
+# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
 # include <signal.h>
 # include <sys/wait.h>
 # include "token.h"
@@ -22,7 +22,7 @@
 
 void	free_array(char **array);
 void	free_array2(char **array, int n);
-int	check_existing_program(char ***argument, char **envp);
+int		check_existing_program(char ***argument, char **envp);
 void	ft_listadd_back(t_token **lst, t_token *new);
 void	exec(t_tree_node *node, char **envp);
 

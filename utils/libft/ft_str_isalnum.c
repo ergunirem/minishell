@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 12:07:34 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/07/22 12:27:26 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/08 16:48:05 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	ft_str_isalnum(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
-		if(!ft_isalnum((int)str[i]))
+		if (!ft_isalnum((int)str[i]))
 			return (0);
 		i++;
 	}
