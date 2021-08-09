@@ -5,12 +5,15 @@ void	exec(t_tree_node *node, char **envp)
 {
 	int			children;
 	t_context	ctx;
+	int			stat;
 
 	ctx = (t_context){{STDIN_FILENO, STDOUT_FILENO, 2}, -1, 0};
 	children = exec_node(node, &ctx, envp);
 	while (children > 0)
 	{
-		wait(NULL);
+		wait(&stat);
+		if (WIFEXITED(stat))
+			update_var("PIPESTATUS", ft_itoa(WEXITSTATUS(stat)));
 		children--;
 	}
 }

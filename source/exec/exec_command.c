@@ -83,7 +83,10 @@ static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
 		if (execve(argv[0], argv, envp) == -1)
+		{
+			update_var("PIPESTATUS", "1");
 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
+		}
 		else
 			return (1);
 	}

@@ -7,13 +7,15 @@
 
 static int	get_path(char *str, char **full_path)
 {
-	char		*path;
+	t_pair_lst	*env_var;
 	char		**paths;
 	int			i;
 	struct stat	buffer;
 
-	path = getenv("PATH");
-	paths = ft_split(path, ':');
+	env_var = find_env_var(g_env.env_vars, "PATH");
+	if (!env_var)
+		return (-1);
+	paths = ft_split(env_var->value, ':');
 	if (!paths)
 		return (error_new_bool(NULL, NULL, strerror(errno), 1));
 	i = 0;
@@ -32,6 +34,47 @@ static int	get_path(char *str, char **full_path)
 	return (-1);
 }
 
+static int	get_argument(char *str)
+{
+	int			i;
+	t_pair_lst	*env_var;
+	char		**paths;
+	struct stat	buffer;
+
+	i = 0;
+	env_var = find_env_var(g_env.env_vars, "PATH");
+	if (!env_var)
+		return (-1);
+	paths = ft_split(env_var->value, ':');
+	if (!paths)
+		return (error_new_bool(NULL, NULL, strerror(errno), 1));
+	while (paths[i])
+	{
+		if (lstat(str, &buffer) == 0)
+		{
+			free_array(paths);
+			return (1);
+		}
+		i++;
+	}
+	free_array(paths);
+	return (-1);
+}
+
+static int	result_check(int result, char *str)
+{
+	if (!result)
+	{
+		update_var("PIPESTATUS", "127");
+		return (0);
+	}
+	else
+	{
+		update_var("PIPESTATUS", "127");
+		return (error_new_bool(str, NULL, "command not found", 1));
+	}
+}
+
 int	check_existing_program(char ***argument, char **envp)
 {
 	char	*semi_path;
@@ -42,17 +85,21 @@ int	check_existing_program(char ***argument, char **envp)
 	{
 		semi_path = ft_strjoin("/", *argument[0]);
 		result = get_path(semi_path, &full_path);
-		if (!result)
-			return (0);
-		if (result == -1)
-		{
-			update_var("PIPESTATUS", "127");
-			return (error_new_bool(*argument[0], NULL, "command not found", 1));
-		}
-		update_var("PIPESTATUS", SUCCESS);
+		if (result == 0 || result == -1)
+			return (result_check(result, *argument[0]));
 		free(*argument[0]);
 		free(semi_path);
 		*argument[0] = full_path;
 	}
+	else
+	{
+		if (get_argument(*argument[0]) == -1)
+		{
+			update_var("PIPESTATUS", "127");
+			return (error_new_bool(*argument[0],
+					NULL, "No such file or directory", 1));
+		}
+	}
+	update_var("PIPESTATUS", SUCCESS);
 	return (1);
 }
