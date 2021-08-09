@@ -24,7 +24,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		read_and_add_to_history(&line);
 		tokens = NULL;
-		lexer(line, &tokens); // print_tokens(tokens);
+		if(!lexer(line, &tokens)) // print_tokens(tokens);
+			free_tokens(&tokens);
 		if (check_list(tokens))
 		{
 			root = parser(&tokens);
@@ -35,6 +36,5 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		line = NULL;
 	}
-	//do I need to free dynamically allocated list on global g_env? 	// free_env();
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/06 11:57:36 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/06 11:57:39 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/09 11:32:43 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ bool	check_list(t_token *tokens)
 	if (!tokens)
 		return (false);
 	if (!check_pipe(tokens))
-		return (error_msg(PIPE_ERROR_MSG, SYNTAX_ERROR));
+		return (error_msg(PIPE_ERROR_MSG, "258"));
 	if (!check_redirection(tokens))
-		return (error_msg(REDIR_ERROR_MSG, SYNTAX_ERROR));
+		return (error_msg(REDIR_ERROR_MSG, "258"));
 	return (true);
 }
