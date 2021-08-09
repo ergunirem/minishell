@@ -70,11 +70,17 @@ static int	check_buildin(char **argv, t_context *ctx, int *argc, char **envp)
 
 static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 {
-	if (fork() == FORK_CHILD)
+	int result;
+
+	result = fork();
+	// g_env.is_forked = 1;
+	// signal(SIGINT, handle_child_signal);
+	// signal(SIGQUIT, handle_child_signal);
+	if (result == FORK_CHILD)
 	{
 		// signal(SIGINT, handle_child_signal);
 		// signal(SIGQUIT, handle_child_signal);
-		// g_env.is_forked = 1;
+		g_env.is_forked = 1;
 		// write(1, &g_env.is_forked, 1);
 		// printf("%d\n", g_env.is_forked);
 		dup2(ctx->fd[0], 0);

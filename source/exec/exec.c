@@ -10,6 +10,8 @@ void	exec(t_tree_node *node, char **envp)
 	children = exec_node(node, &ctx, envp);
 	while (children > 0)
 	{
+		signal(SIGINT, handle_child_signal);
+		signal(SIGQUIT, handle_child_signal);
 		wait(NULL);
 		children--;
 	}

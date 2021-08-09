@@ -43,6 +43,8 @@ void	update_var(char *key, char *value)
 	t_pair_lst	*new;
 
 	new = find_env_var(g_env.env_vars, key);
+	if (!new)
+		return ;
 	free(new->value);
 	new->value = ft_strdup(value);
 }
