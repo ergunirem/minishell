@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 19:26:34 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/05 19:32:50 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/09 09:39:38 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int	exec_export(char **args, int argc, t_context *ctx)
 			i++;
 			continue ;
 		}
-		create_or_update_env(args[i], ctx->fd[2]);
+		if (create_or_update_env(args[i], ctx->fd[2]) == 1)
+			return (1);
 		i++;
 	}
 	return (0);
