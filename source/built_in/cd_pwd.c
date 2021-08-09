@@ -47,6 +47,11 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 static	int	just_cd_command(t_pair_lst	*env_var, t_context *ctx)
 {
 	env_var = find_env_var(g_env.env_vars, "HOME");
+	if (!env_var)
+	{
+		update_var("PIPESTATUS", GENERAL_ERROR);
+		return (error_new_int("cd", "HOME", "not set", ctx->fd[2]));
+	}
 	if (chdir(env_var->value) == -1)
 	{
 		update_var("PIPESTATUS", GENERAL_ERROR);
