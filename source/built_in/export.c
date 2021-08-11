@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 19:26:34 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 09:39:38 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int	create_or_update_env(char *arg, int fd_err)
 	if (!ft_isname(new->key))
 	{
 		free_var(new);
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("export", arg, IDENTIFIER_ERR_MSG, fd_err));
 	}
 	if (find_env_var(g_env.env_vars, new->key))
 	{
-		update_var(new->key, new->value);
+		set_var(new->key, new->value);
 		free_var(new);
 	}
 	else
@@ -67,7 +67,7 @@ int	exec_export(char **args, int argc, t_context *ctx)
 	{
 		if (ft_strrchr(args[i], '-'))
 		{
-			update_var("PIPESTATUS", GENERAL_ERROR);
+			set_var("PIPESTATUS", GENERAL_ERROR);
 			error_new_int("export", args[i], IDENTIFIER_ERR_MSG, ctx->fd[2]);
 			return (1);
 		}

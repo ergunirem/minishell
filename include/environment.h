@@ -42,8 +42,8 @@ int			init_env_variables(char **envp);
 int			add_env(char *envp);
 t_pair_lst	*find_env_var(t_pair_lst *lst, char *var_name);
 t_pair_lst	*create_key_value_pair(char *env_var);
-void		set_var(char *key, char *value);
 void		update_var(char *key, char *value);
+void		set_var(char *key, char *value);
 void		remove_var(t_pair_lst **lst, char *key);
 void		free_var(t_pair_lst *var);
 

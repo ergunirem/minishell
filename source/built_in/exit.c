@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 20:04:35 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 12:36:51 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	exec_exit(char **args, int argc, t_context *ctx)
 	}
 	if (argc > 2)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		ft_putstr_fd("logout\n", ctx->fd[2]);
 		return (error_new_int("exit", NULL, MANY_ARG_ERR_MSG, ctx->fd[2]));
 	}

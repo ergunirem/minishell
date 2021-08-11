@@ -24,12 +24,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		read_and_add_to_history(&line);
 		tokens = NULL;
-		if(!lexer(line, &tokens)) // print_tokens(tokens);
+		if (!lexer(line, &tokens))
 			free_tokens(&tokens);
 		if (check_list(tokens))
 		{
 			root = parser(&tokens);
-			exec(root, envp); // print_tree(root);
+			exec(root, envp);
 			free_tree(root);
 		}
 		free_tokens(&tokens);

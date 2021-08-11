@@ -6,14 +6,16 @@
 static int	initiate_redirection(t_token *token, t_context *ctx,
 	int *argc, char ***argv)
 {
-	ctx->redir = malloc(argc[1] * sizeof(int));
+	ctx->redir = malloc(argc[1] * sizeof(int));//should I initiate all to -1??
 	if (!ctx->redir && argc[1] > 0)
 	{
 		error_msg(strerror(errno), "1");
 		return (-1);
 	}
+	// printf ("argc is %d and count is %d\n", argc[0], argc[1]);
 	argc[0] = argc[0] - argc[1] * 2;
 	*argv = malloc((argc[0] + 1) * sizeof(char *));
+	*argv[argc[0]] = NULL;
 	if (!argv)
 	{
 		error_msg(strerror(errno), "1");
@@ -58,7 +60,7 @@ static int	check_buildin(char **argv, t_context *ctx, int *argc, char **envp)
 	if (is_built_in(argv[0]))
 	{
 		if (exec_built_in(argv, argc[0], ctx, envp) == 0)
-			update_var("PIPESTATUS", SUCCESS);
+			set_var("PIPESTATUS", SUCCESS);
 		close_redirection(ctx->redir, argc[1]);
 		free_array(argv);
 		free(ctx->redir);
@@ -70,19 +72,12 @@ static int	check_buildin(char **argv, t_context *ctx, int *argc, char **envp)
 
 static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 {
-	int result;
+	int	result;
 
 	result = fork();
-	// g_env.is_forked = 1;
-	// signal(SIGINT, handle_child_signal);
-	// signal(SIGQUIT, handle_child_signal);
 	if (result == FORK_CHILD)
 	{
-		// signal(SIGINT, handle_child_signal);
-		// signal(SIGQUIT, handle_child_signal);
 		g_env.is_forked = 1;
-		// write(1, &g_env.is_forked, 1);
-		// printf("%d\n", g_env.is_forked);
 		dup2(ctx->fd[0], 0);
 		dup2(ctx->fd[1], 1);
 		dup2(ctx->fd[2], 2);
@@ -90,7 +85,7 @@ static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 			close(ctx->fd_close);
 		if (execve(argv[0], argv, envp) == -1)
 		{
-			update_var("PIPESTATUS", "1");
+			set_var("PIPESTATUS", "1");
 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
 		}
 		else
@@ -98,6 +93,26 @@ static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 	}
 	return (1);
 }
+
+// void	deal_executable(char *argv)
+// {
+// 	int	len;
+// 	int	i;
+
+// 	i = 0;
+// 	if (argv)
+// 	{
+// 		len = ft_strlen(argv);
+// 		if (len >= 2 && argv[0] == '.' && argv[1] == '/')
+// 		{
+// 			while (i < len - 1)
+// 			{
+// 				argv[i] = argv[i + 1];
+// 				i++;
+// 			}
+// 		}
+// 	}
+// }
 
 int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 {
@@ -107,11 +122,13 @@ int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 	argv = NULL;
 	argc[0] = count_node(node->data.cmd.tokens);
 	argc[1] = count_redirection(node->data.cmd.tokens, ctx);
-	argc[0] = initiate_redirection(node->data.cmd.tokens, ctx, argc, &argv);
+	argc[0] = initiate_redirection(node->data.cmd.tokens, ctx, argc, &argv);//parse the number of the arguments to allocate space
 	if (argc[0] == -1)
 		return (-1);
 	if (parse_argument(argv, node->data.cmd.tokens, argc, ctx))
 		return (-1);
+	// deal_executable(argv[0]);
+	printf("argument is %s\n", argv[0]);
 	if (check_buildin(argv, ctx, argc, envp) == 0)
 		return (0);
 	if (check_existing_program(&argv, envp) == 0)

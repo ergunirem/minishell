@@ -5,7 +5,7 @@ bool	error_msg(char *msg, char *error_code)
 	ft_putstr_fd("Minishell: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
-	update_var("PIPESTATUS", error_code);
+	set_var("PIPESTATUS", error_code);
 	return (false);
 }
 
@@ -59,7 +59,7 @@ bool	lexer_error(t_token *new, char *msg, char *error_code)
 	ft_putstr_fd("Minishell: error: ", 1);
 	ft_putstr_fd(msg, 1);
 	ft_putstr_fd("\n", 1);
-	update_var("PIPESTATUS", error_code);
+	set_var("PIPESTATUS", error_code);
 	if (new)
 	{
 		free(new->content);
