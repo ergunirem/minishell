@@ -19,7 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	if (init_env_variables(envp) == 1)
 		return (1);
 	signal(SIGINT, handle_parent_signal);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, handle_parent_signal);
 	while (1)
 	{
 		read_and_add_to_history(&line);
@@ -32,9 +32,12 @@ int	main(int argc, char **argv, char **envp)
 			exec(root, envp);
 			free_tree(root);
 		}
+		// system ("leaks minishell");
 		free_tokens(&tokens);
 		free(line);
-		line = NULL;
+		// line = NULL;
+		// system ("leaks minishell");
+		g_env.pipe_exit = 0;
 	}
 	return (0);
 }

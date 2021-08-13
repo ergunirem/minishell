@@ -94,13 +94,8 @@ int	count_redirection(t_token *token, t_context *ctx)
 	{
 		if (token->type != CHAR_WORD)
 		{
-			if (!token->next || !token->next->content)
-				return (-1);
-			else
-			{
-				count++;
-				token = token->next->next;
-			}
+			count++;
+			token = token->next->next;
 		}
 		else
 			token = token->next;
