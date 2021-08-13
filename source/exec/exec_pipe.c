@@ -25,15 +25,6 @@ static int	pipe_right(t_pipe_node *pipe, char **envp, int *p, t_context *ctx)
 	return (count);
 }
 
-static int 	close_pipe(int p[2], int result)
-{
-	if (p[0] > 0)
-		close(p[0]);
-	if (p[1] > 0)
-		close(p[1]);
-	return (result);
-}
-
 int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
 {
 	int			p[2];
@@ -48,13 +39,13 @@ int	exec_pipe(t_tree_node *node, t_context *ctx, char **envp)
 	children = 0;
 	count = pipe_left(&(node->data.pipe), envp, p, ctx);
 	if (count < 0)
-		return (close_pipe(p, -1));
+		return (-1);
 	else
 		children = children + count;
 	close(p[1]);
 	count = pipe_right(&(node->data.pipe), envp, p, ctx);
 	if (count < 0)
-		return (close_pipe(p, -1));
+		return (-1);
 	else
 		children = children + count;
 	close(p[0]);

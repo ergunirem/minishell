@@ -6,12 +6,12 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/07 22:05:07 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/10 17:13:31 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/signal.h"
-#include<stdio.h>
+#include <stdio.h>
 
 /*
 **	if ctrl-\ (SIGQUIT) is received
@@ -25,13 +25,13 @@ void	handle_parent_signal(int sig)
 {
 	if (sig == SIGQUIT)
 	{
-		set_var("PIPESTATUS", "131");
+		set_var("PIPESTATUS", "0");
 		rl_on_new_line();
 		rl_redisplay();
 	}
 	if (sig == SIGINT)
 	{
-		set_var("PIPESTATUS", "130");
+		set_var("PIPESTATUS", "1");
 		ft_putstr_fd("\n", 1);
 		rl_replace_line("", 1);
 		rl_on_new_line();
@@ -46,13 +46,19 @@ void	handle_parent_signal(int sig)
 void	handle_child_signal(int sig)
 {
 	if (sig == SIGQUIT)
+	{
+		ft_putstr_fd("Quit: 3\n", 2);
 		set_var("PIPESTATUS", "131");
+	}
 	if (sig == SIGINT)
+	{
+		ft_putstr_fd("\n", 2);
 		set_var("PIPESTATUS", "130");
+	}
 }
 
 int	handle_ctrl_d(void)
 {
-	ft_putstr_fd("logout\n", 2);
+	ft_putstr_fd("exit\n", 2);
 	exit(0);
 }

@@ -4,25 +4,16 @@
 #define FORK_CHILD 0
 
 static int	initiate_redirection(t_token *token, t_context *ctx,
-								int *argc, char ***argv)
+	int *argc, char ***argv)
 {
-	int	i;
-
-	i = 0;
 	ctx->redir = malloc(argc[1] * sizeof(int));
 	if (!ctx->redir && argc[1] > 0)
 	{
 		error_msg(strerror(errno), "1");
 		return (-1);
 	}
-	while (i < argc[1])
-	{
-		ctx->redir[i] = -1;
-		i++;
-	}
 	argc[0] = argc[0] - argc[1] * 2;
 	*argv = malloc((argc[0] + 1) * sizeof(char *));
-	(*argv)[argc[0]] = NULL;
 	if (!argv)
 	{
 		error_msg(strerror(errno), "1");
@@ -33,7 +24,7 @@ static int	initiate_redirection(t_token *token, t_context *ctx,
 }
 
 static int	parse_argument(char **argv, t_token *token, int *argc,
-						  t_context *ctx)
+	t_context *ctx)
 {
 	argv[argc[0]] = NULL;
 	argc[0] = 0;
@@ -67,9 +58,14 @@ static int	check_buildin(char **argv, t_context *ctx, int *argc, char **envp)
 	if (is_built_in(argv[0]))
 	{
 		if (exec_built_in(argv, argc[0], ctx, envp) == 0)
-			return (0);
+			set_var("PIPESTATUS", SUCCESS);
+		close_redirection(ctx->redir, argc[1]);
+		free_array(argv);
+		free(ctx->redir);
+		return (0);
 	}
-	return (-1);
+	else
+		return (1);
 }
 
 static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
@@ -90,15 +86,39 @@ static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 			set_var("PIPESTATUS", "1");
 			return (error_new_bool(argv[0], NULL, strerror(errno), 1));
 		}
+		else
+			return (1);
 	}
 	return (1);
 }
+
+// void	expand_without_quote(t_token *cmd_list)
+// {
+// 	char	**expanded_var;
+// }
+// void	check_expansion_without_quotes(t_tree_node *node)
+// {
+
+// 	t_token	*cmd_list;
+// 	printf("before\n");
+// 	print_tokens(node->data.cmd.tokens);
+// 	cmd_list = node->data.cmd.tokens;
+// 	while(cmd_list)
+// 	{
+// 		if ((cmd_list->content)[0] == '$')
+// 			expand_without_quote(cmd_list);
+// 		cmd_list = cmd_list->next;
+// 	}
+// 	printf("after\n");
+// 	print_tokens(node->data.cmd.tokens);
+// }
 
 int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 {
 	int		argc[2];
 	char	**argv;
 
+	// check_expansion_without_quotes(node);
 	argv = NULL;
 	argc[0] = count_node(node->data.cmd.tokens);
 	argc[1] = count_redirection(node->data.cmd.tokens, ctx);
@@ -106,12 +126,15 @@ int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 	if (argc[0] == -1)
 		return (-1);
 	if (parse_argument(argv, node->data.cmd.tokens, argc, ctx))
-		return (free_set(argv, ctx, argc[1], -1));
+		return (-1);
 	if (check_buildin(argv, ctx, argc, envp) == 0)
-		return (free_set(argv, ctx, argc[1], 0));
+		return (0);
 	if (check_existing_program(&argv, envp) == 0)
-		return (free_set(argv, ctx, argc[1], 0));
+		return (0);
 	if (exec_existing_program(ctx, argv, envp) == 0)
-		return (free_set(argv, ctx, argc[1], 0));
-	return (free_set(argv, ctx, argc[1], 1));
+		return (0);
+	free_array(argv);
+	close_redirection(ctx->redir, argc[1]);
+	free(ctx->redir);
+	return (1);
 }

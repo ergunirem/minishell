@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/06 11:58:03 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/12 11:50:41 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/06 11:58:05 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_tree_node	*parse_pipe(t_token **tokens)
 	t_tree_node	*left;
 	t_tree_node	*right;
 
-	g_env.pipe_exit = 1;
 	left = parse_command(tokens);
 	right = parser(tokens);
 	return (create_pipe_node(left, right));

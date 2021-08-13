@@ -13,7 +13,6 @@ SRCS	=	source/minishell.c \
 			source/prints/print_token.c \
 			source/helper/error.c \
 			source/helper/free.c \
-			source/helper/free2.c \
 			source/helper/list.c \
 			source/exec/exec_existing_prog.c\
 			source/exec/exec.c \

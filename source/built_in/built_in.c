@@ -21,7 +21,6 @@ bool	is_built_in(char *cmd)
 
 int	exec_built_in(char **args, int argc, t_context *ctx, char **envp)
 {
-	set_var("PIPESTATUS", SUCCESS);
 	if (ft_strncmp(args[0], "cd", 3) == 0)
 		return (exec_cd(args, ctx));
 	if (ft_strncmp(args[0], "pwd", 4) == 0)

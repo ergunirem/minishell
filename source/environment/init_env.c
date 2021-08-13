@@ -43,7 +43,6 @@ int	init_env_variables(char **envp)
 	t_pair_lst	*new;
 
 	g_env.is_forked = 0;
-	g_env.pipe_exit = 0;
 	while (*envp)
 	{
 		if (add_env(*envp) == 1)

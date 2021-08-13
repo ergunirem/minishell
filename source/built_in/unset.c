@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 19:37:26 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/11 15:50:49 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	exec_unset(char **args, int argc, t_context *ctx)
 		{
 			err = 1;
 			set_var("PIPESTATUS", GENERAL_ERROR);
-			error_new_int(args[0], args[i], IDENTIFIER_ERR_MSG, ctx->fd[2]);
+			error_new_int(args[0], args[i], ID_ERR_MSG, ctx->fd[2]);
 		}
 		else if (find_env_var(g_env.env_vars, args[i]))
 			remove_var(&g_env.env_vars, args[i]);

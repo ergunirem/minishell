@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ft_strchr.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: icikrikc <marvin@codam.nl>                   +#+                     */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 09:05:50 by icikrikc      #+#    #+#                 */
-/*   Updated: 2020/11/17 14:07:39 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/10 17:41:04 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strchr(const char *s, int c)
 	int		len;
 	int		i;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen(s);
 	i = 0;
 	while (i <= len)
