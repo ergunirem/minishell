@@ -54,7 +54,9 @@ static int	parse_argument(char **argv, t_token *token, int *argc,
 				free_array2(argv, argc[0]);
 				return (1);
 			}
+			// printf("arg0 is %s\n", argv[0]);
 			argv[argc[0]] = remove_quotes_and_expand(argv[argc[0]]);
+			// printf("arg0 after adjustment is %s\n", argv[0]);
 			argc[0]++;
 			token = token->next;
 		}
@@ -94,6 +96,86 @@ static int	exec_existing_program(t_context *ctx, char **argv, char **envp)
 	return (1);
 }
 
+int	count_whitespace(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i] && str[i + 1])
+	{
+		if (ft_iswhitespace(str[i]) && !ft_iswhitespace(str[i + 1]))
+			count++;
+		i++;
+	}
+	// printf("count is %d\n", count);
+	if (ft_iswhitespace(str[0]) && i == 0)
+		return (-1);//env is only white space =>should only pomp a new line
+	else if (ft_iswhitespace(str[0]))
+		return (count - 1);
+	else
+		return (count);
+}
+
+void	parse_nonwhitesp(char *str, char **argv, int *k)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	while (str[i])
+	{
+		if ((i == 0 && (!ft_iswhitespace(str[i]))) || (!ft_iswhitespace(str[i]) && i > 0 && ft_iswhitespace(str[i - 1])))
+		{
+			len = 0;
+			while (str[i + len])
+			{
+				if (!ft_iswhitespace(str[i + len]) && (!str[i + len + 1] || ft_iswhitespace(str[i + len + 1])))
+				{
+					argv[*k] = ft_substr(str, i, len + 1);
+					// printf("argv %d is %s i is %d len is %d\n", *k, argv[*k], i, len);
+					(*k)++;
+					break;
+				}
+				len++;
+			}
+			i = i + len;
+		}
+		i++;
+	}
+}
+
+int	check_complexcmd (char ***argv, int *argc)
+{
+	int	i;
+	int	j;
+	int	k;
+	char **argv2;
+
+	i = count_whitespace((*argv)[0]);
+	if (i == -1)
+		return (0);
+	if (i == 0)
+		return (1);
+	j = 0;
+	argv2 = malloc((argc[0] + 1 + i) * sizeof(char *));
+	argv2[argc[0] + i] = NULL;
+	if (!argv2)
+		return (error_new_bool(NULL, NULL, strerror(errno), 2));
+	parse_nonwhitesp((*argv)[0], argv2, &j);
+	// printf("j is %d and i is %d\n", j, i);
+	while (j < argc[0] + 1 + i)
+	{
+		argv2[j] = ft_strdup((*argv)[j - i]);
+		// printf("argv2 %d is %s\n", j, argv2[j]);
+		j++;
+	}
+	free_array(*argv);
+	*argv = argv2;
+	return (1);
+}
+
 int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 {
 	int		argc[2];
@@ -107,6 +189,8 @@ int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 		return (-1);
 	if (parse_argument(argv, node->data.cmd.tokens, argc, ctx))
 		return (free_set(argv, ctx, argc[1], -1));
+	if (check_complexcmd(&argv, argc) == 0)
+		return (-1);
 	if (check_buildin(argv, ctx, argc, envp) == 0)
 		return (free_set(argv, ctx, argc[1], 0));
 	if (check_existing_program(&argv, envp) == 0)

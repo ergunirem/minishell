@@ -30,5 +30,6 @@ int				exec_node(t_tree_node *node, t_context *ctx, char **envp);
 int				count_node(t_token *token);
 void			close_redirection(int *fd, int count);
 int				free_set(char **argv, t_context *ctx, int argc, int n);
+int				check_complexcmd (char ***argv, int *argc);
 
 #endif
