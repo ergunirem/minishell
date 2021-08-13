@@ -11,9 +11,16 @@ void	exec(t_tree_node *node, char **envp)
 	children = exec_node(node, &ctx, envp);
 	while (children > 0)
 	{
+		if (WIFSIGNALED(stat))
+		{
+			signal(SIGINT, handle_child_signal);
+			signal(SIGQUIT, handle_child_signal);
+		}
 		wait(&stat);
 		if (WIFEXITED(stat))
-			update_var("PIPESTATUS", ft_itoa(WEXITSTATUS(stat)));
+			set_var("PIPESTATUS", ft_itoa(WEXITSTATUS(stat)));
+		signal(SIGINT, handle_parent_signal);
+		signal(SIGQUIT, handle_parent_signal);
 		children--;
 	}
 }
@@ -32,7 +39,8 @@ void	close_redirection(int *fd, int count)
 {
 	while (count > 0)
 	{
-		close(fd[count - 1]);
+		if (fd[count - 1] >= 0)
+			close(fd[count - 1]);
 		count--;
 	}
 }

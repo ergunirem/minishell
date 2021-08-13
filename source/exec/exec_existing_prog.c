@@ -65,23 +65,62 @@ static int	result_check(int result, char *str)
 {
 	if (!result)
 	{
-		update_var("PIPESTATUS", "127");
+		set_var("PIPESTATUS", "127");
 		return (0);
 	}
 	else
 	{
-		update_var("PIPESTATUS", "127");
+		set_var("PIPESTATUS", "127");
 		return (error_new_bool(str, NULL, "command not found", 1));
 	}
+}
+
+int	count_slash(char *str)
+{
+	int	len;
+	int	i;
+	int	count_slash;
+
+	len = ft_strlen(str);
+	i = 0;
+	count_slash = 0;
+	while (i < len)
+	{
+		if (str[i] == '/')
+			count_slash++;
+	}
+	return (count_slash);
 }
 
 int	check_existing_program(char ***argument, char **envp)
 {
 	char	*semi_path;
 	char	*full_path;
+	char	*buff;
 	int		result;
+	int		len;
 
-	if (*argument[0][0] != '/')
+	if (*argument[0] == NULL)
+		return (0);
+	if ((*argument)[0][0] == '\0')
+	{
+		set_var("PIPESTATUS", "127");
+		return (error_new_bool("\0", NULL, "command not found", 1));
+	}
+	if ((*argument)[0][0] == '.')
+	{
+		len = ft_strlen(*argument[0]);
+		if (len > 1 && (*argument)[0][0] == '.' && (*argument)[0][1] == '/')
+		{
+			semi_path = getcwd(NULL, 0);
+			(*argument)[0] = ft_memmove(*argument[0], (*argument)[0] + 1, len - 1);
+			(*argument)[0][len - 1] = '\0';
+			full_path = ft_strjoin(semi_path, *argument[0]);
+			printf("full_path is %s\n", full_path);
+			*argument[0] = full_path;
+		}
+	}
+	else if (*argument[0][0] != '/')
 	{
 		semi_path = ft_strjoin("/", *argument[0]);
 		result = get_path(semi_path, &full_path);
@@ -95,11 +134,11 @@ int	check_existing_program(char ***argument, char **envp)
 	{
 		if (get_argument(*argument[0]) == -1)
 		{
-			update_var("PIPESTATUS", "127");
+			set_var("PIPESTATUS", "127");
 			return (error_new_bool(*argument[0],
 					NULL, "No such file or directory", 1));
 		}
 	}
-	update_var("PIPESTATUS", SUCCESS);
+	set_var("PIPESTATUS", SUCCESS);
 	return (1);
 }

@@ -7,7 +7,7 @@ int	exec_pwd(t_context *ctx)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("pwd", "getcwd", strerror(errno), ctx->fd[2]));
 	}
 	ft_putstr_fd(path, ctx->fd[1]);
@@ -24,7 +24,7 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("cd", "getcwd", strerror(errno), fd_err));
 	}
 	env_var = find_env_var(lst, var_name);
@@ -37,7 +37,7 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 		free(path);
 		if (!env_var->value)
 		{
-			update_var("PIPESTATUS", GENERAL_ERROR);
+			set_var("PIPESTATUS", GENERAL_ERROR);
 			return (error_new_int("cd", "ft_stdrup", "Malloc failed\n", fd_err));
 		}
 	}
@@ -49,12 +49,12 @@ static	int	just_cd_command(t_pair_lst	*env_var, t_context *ctx)
 	env_var = find_env_var(g_env.env_vars, "HOME");
 	if (!env_var)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		return (error_new_int("cd", "HOME", "not set", ctx->fd[2]));
 	}
 	if (chdir(env_var->value) == -1)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		error_new_int("cd", env_var->value, strerror(errno), ctx->fd[2]);
 		return (1);
 	}
@@ -80,7 +80,7 @@ int	exec_cd(char **arguments, t_context *ctx)
 		tmp = ft_strdup(arguments[1]);
 	if (chdir(tmp) == -1)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
+		set_var("PIPESTATUS", GENERAL_ERROR);
 		error_new_int("cd", tmp, strerror(errno), ctx->fd[2]);
 		free(tmp);
 		return (1);

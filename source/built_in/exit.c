@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 20:04:35 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 12:36:51 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/12 16:27:17 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,40 @@ int	exec_exit(char **args, int argc, t_context *ctx)
 	{
 		if (!check_numeric(args[1]))
 		{
-			ft_putstr_fd("logout\n", ctx->fd[2]);
+			// ft_putstr_fd("logout\n", ctx->fd[2]);
 			error_new_int("exit", args[1], NUMERIC_ERROR, ctx->fd[2]);
 			exit_code = 255;
-			exit(exit_code % 256);
+			if (g_env.pipe_exit == 1)
+			{
+				if (fork() == 0)
+				{
+					exit(exit_code % 256);
+				}
+				wait(NULL);
+				set_var("PIPESTATUS", "255");
+				return(0);
+			}
+			else
+				exit(exit_code % 256);
 		}
 		exit_code = ft_atoi(args[1]);
 	}
 	if (argc > 2)
 	{
-		update_var("PIPESTATUS", GENERAL_ERROR);
-		ft_putstr_fd("logout\n", ctx->fd[2]);
+		set_var("PIPESTATUS", GENERAL_ERROR);
+		// ft_putstr_fd("logout\n", ctx->fd[2]);
 		return (error_new_int("exit", NULL, MANY_ARG_ERR_MSG, ctx->fd[2]));
 	}
-	ft_putstr_fd("logout\n", ctx->fd[2]);
-	exit(exit_code % 256);
+	// ft_putstr_fd("logout\n", ctx->fd[2]);
+	if (g_env.pipe_exit == 1)
+	{
+		if (fork() == 0)
+		{
+			exit(exit_code % 256);
+		}
+		wait (NULL);
+		set_var("PIPESTATUS", ft_itoa(exit_code % 256));
+	}
+	else
+		exit(exit_code % 256);
 }
