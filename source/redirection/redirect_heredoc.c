@@ -16,9 +16,12 @@ static int	str_cmp(char *str1, char *str2)
 static void	with_expansion(char *delimiter, char *newline, int *fd)
 {
 	int	len_nl;
-
+	// printf(">%s >%s\n", delimiter, newline);
+	if(!newline)
+		exit(0);
 	while (str_cmp(delimiter, newline) != 0)
 	{
+
 		if (ft_strrchr(newline, '$'))
 			newline = just_expand(newline);
 		len_nl = ft_strlen(newline);
@@ -26,6 +29,8 @@ static void	with_expansion(char *delimiter, char *newline, int *fd)
 		write(fd[1], "\n", 1);
 		free(newline);
 		newline = readline(">");
+		if (!newline)
+			exit(0);
 	}
 	free(newline);
 }
@@ -41,6 +46,8 @@ static void	without_expansion(char *delimiter, char *newline, int *fd)
 		write(fd[1], "\n", 1);
 		free(newline);
 		newline = readline(">");
+		if (!newline)
+			break ;
 	}
 	free(newline);
 }

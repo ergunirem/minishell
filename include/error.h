@@ -14,7 +14,7 @@
 # define PIPE_ERROR_MSG "syntax error near unexpected token `|'"
 # define REDIR_ERROR_MSG "syntax error near unexpected token redirection"
 # define MANY_ARG_ERR_MSG "too many arguments"
-# define IDENTIFIER_ERR_MSG "not a valid identifier"
+# define ID_ERR_MSG "not a valid identifier"
 
 bool	error_msg(char *msg, char *error_code);
 bool	error_new_bool(char *command, char *arg, char *msg, int fd);

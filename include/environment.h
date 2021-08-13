@@ -34,7 +34,6 @@ typedef struct s_env
 {
 	t_pair_lst	*env_vars;
 	int			is_forked;
-	int			pipe_exit;
 }	t_env;
 
 extern t_env	g_env;

@@ -39,8 +39,7 @@ void	close_redirection(int *fd, int count)
 {
 	while (count > 0)
 	{
-		if (fd[count - 1] >= 0)
-			close(fd[count - 1]);
+		close(fd[count - 1]);
 		count--;
 	}
 }

@@ -21,7 +21,6 @@ int	change_dir_var(t_pair_lst *lst, char *var_name, int fd_err)
 	t_pair_lst	*env_var;
 	char		*path;
 
-	path = getcwd(NULL, 0);
 	if (!path)
 	{
 		set_var("PIPESTATUS", GENERAL_ERROR);

@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 19:26:34 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/11 15:50:12 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,17 @@ int	create_or_update_env(char *arg, int fd_err)
 	t_pair_lst	*new;
 
 	new = create_key_value_pair(arg);
+	if (!new)
+		return (1);
 	if (!ft_isname(new->key))
 	{
 		free_var(new);
 		set_var("PIPESTATUS", GENERAL_ERROR);
-		return (error_new_int("export", arg, IDENTIFIER_ERR_MSG, fd_err));
+		return (error_new_int("export", arg, ID_ERR_MSG, fd_err));
 	}
 	if (find_env_var(g_env.env_vars, new->key))
 	{
-		set_var(new->key, new->value);
+		update_var(new->key, new->value);
 		free_var(new);
 	}
 	else
@@ -65,19 +67,14 @@ int	exec_export(char **args, int argc, t_context *ctx)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_strrchr(args[i], '-'))
-		{
-			set_var("PIPESTATUS", GENERAL_ERROR);
-			error_new_int("export", args[i], IDENTIFIER_ERR_MSG, ctx->fd[2]);
-			return (1);
-		}
 		if (!ft_strrchr(args[i], '='))
 		{
+			if (!ft_isname(args[i]))
+				error_new_int("export", args[i], ID_ERR_MSG, ctx->fd[2]);
 			i++;
 			continue ;
 		}
-		if (create_or_update_env(args[i], ctx->fd[2]) == 1)
-			return (1);
+		create_or_update_env(args[i], ctx->fd[2]);
 		i++;
 	}
 	return (0);
