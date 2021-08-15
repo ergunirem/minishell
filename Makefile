@@ -16,9 +16,11 @@ SRCS	=	source/minishell.c \
 			source/helper/free2.c \
 			source/helper/list.c \
 			source/exec/exec_existing_prog.c\
+			source/exec/exec_existing_prog2.c\
 			source/exec/exec.c \
 			source/exec/exec_pipe.c \
 			source/exec/exec_command.c \
+			source/exec/exec_complex_cmd.c \
 			source/built_in/built_in.c \
 			source/built_in/cd_pwd.c \
 			source/built_in/env.c \

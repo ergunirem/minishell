@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   redirect_heredoc.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:06:54 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:09:41 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 static int	str_cmp(char *str1, char *str2)
@@ -17,6 +29,8 @@ static void	with_expansion(char *delimiter, char *newline, int *fd)
 {
 	int	len_nl;
 
+	if (!newline)
+		exit(0);
 	while (str_cmp(delimiter, newline) != 0)
 	{
 		if (ft_strrchr(newline, '$'))
@@ -26,6 +40,8 @@ static void	with_expansion(char *delimiter, char *newline, int *fd)
 		write(fd[1], "\n", 1);
 		free(newline);
 		newline = readline(">");
+		if (!newline)
+			exit(0);
 	}
 	free(newline);
 }
@@ -41,6 +57,8 @@ static void	without_expansion(char *delimiter, char *newline, int *fd)
 		write(fd[1], "\n", 1);
 		free(newline);
 		newline = readline(">");
+		if (!newline)
+			break ;
 	}
 	free(newline);
 }

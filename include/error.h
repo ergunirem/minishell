@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   error.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:05:15 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:05:17 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 
@@ -14,7 +26,7 @@
 # define PIPE_ERROR_MSG "syntax error near unexpected token `|'"
 # define REDIR_ERROR_MSG "syntax error near unexpected token redirection"
 # define MANY_ARG_ERR_MSG "too many arguments"
-# define IDENTIFIER_ERR_MSG "not a valid identifier"
+# define ID_ERR_MSG "not a valid identifier"
 
 bool	error_msg(char *msg, char *error_code);
 bool	error_new_bool(char *command, char *arg, char *msg, int fd);

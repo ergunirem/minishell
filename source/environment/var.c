@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   var.c                                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:01:13 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:01:14 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/environment.h"
 
 t_pair_lst	*find_env_var(t_pair_lst *lst, char *var_name)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   cd_pwd.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:07:50 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:07:51 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/built_in.h"
 
 int	exec_pwd(t_context *ctx)
@@ -50,15 +62,17 @@ static	int	just_cd_command(t_pair_lst	*env_var, t_context *ctx)
 	if (!env_var)
 	{
 		set_var("PIPESTATUS", GENERAL_ERROR);
-		return (error_new_int("cd", "HOME", "not set", ctx->fd[2]));
+		error_new_int("cd", "HOME", "not set", ctx->fd[2]);
+		return (0);
 	}
 	if (chdir(env_var->value) == -1)
 	{
 		set_var("PIPESTATUS", GENERAL_ERROR);
 		error_new_int("cd", env_var->value, strerror(errno), ctx->fd[2]);
-		return (1);
+		return (0);
 	}
-	return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
+	change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]);
+	return (0);
 }
 
 int	exec_cd(char **arguments, t_context *ctx)
@@ -83,8 +97,9 @@ int	exec_cd(char **arguments, t_context *ctx)
 		set_var("PIPESTATUS", GENERAL_ERROR);
 		error_new_int("cd", tmp, strerror(errno), ctx->fd[2]);
 		free(tmp);
-		return (1);
+		return (0);
 	}
 	free(tmp);
-	return (change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]));
+	change_dir_var(g_env.env_vars, "PWD", ctx->fd[2]);
+	return (0);
 }

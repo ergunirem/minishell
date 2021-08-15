@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   exec_command.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:03:08 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/14 14:36:18 by Xiaojing      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 #include "../../include/built_in.h"
 
@@ -107,6 +119,7 @@ int	exec_command(t_tree_node *node, t_context *ctx, char **envp)
 		return (-1);
 	if (parse_argument(argv, node->data.cmd.tokens, argc, ctx))
 		return (free_set(argv, ctx, argc[1], -1));
+	check_complexcmd(&argv, argc);
 	if (check_buildin(argv, ctx, argc, envp) == 0)
 		return (free_set(argv, ctx, argc[1], 0));
 	if (check_existing_program(&argv, envp) == 0)

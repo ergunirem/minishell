@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   built_in.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:05:04 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/14 14:31:01 by Xiaojing      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BUILT_IN_H
 # define BUILT_IN_H
 
@@ -30,5 +42,10 @@ int				exec_node(t_tree_node *node, t_context *ctx, char **envp);
 int				count_node(t_token *token);
 void			close_redirection(int *fd, int count);
 int				free_set(char **argv, t_context *ctx, int argc, int n);
+int				check_complexcmd(char ***argv, int *argc);
+int				treat_exec(char *semi_path, char ***argument, char *full_path);
+int				find_executable_path(char *semi_path,
+					char *full_path, char ***argument);
+int				get_path(char *str, char **full_path);
 
 #endif

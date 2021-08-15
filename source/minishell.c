@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:08:29 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:18:32 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 t_env	g_env;
@@ -32,12 +44,9 @@ int	main(int argc, char **argv, char **envp)
 			exec(root, envp);
 			free_tree(root);
 		}
-		// system ("leaks minishell");
 		free_tokens(&tokens);
 		free(line);
-		// line = NULL;
-		// system ("leaks minishell");
+		line = NULL;
 		g_env.pipe_exit = 0;
 	}
-	return (0);
 }

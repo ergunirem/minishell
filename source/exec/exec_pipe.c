@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   exec_pipe.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/08/13 22:07:24 by icikrikc      #+#    #+#                 */
+/*   Updated: 2021/08/13 22:07:25 by icikrikc      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 #include "../../include/built_in.h"
 
@@ -25,7 +37,7 @@ static int	pipe_right(t_pipe_node *pipe, char **envp, int *p, t_context *ctx)
 	return (count);
 }
 
-static int 	close_pipe(int p[2], int result)
+static int	close_pipe(int p[2], int result)
 {
 	if (p[0] > 0)
 		close(p[0]);

@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 19:21:18 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/09 17:30:56 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2021/08/13 16:30:08 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	exec_env(char **args, int argc, t_context *ctx)
 	if (argc != 1)
 	{
 		set_var("PIPESTATUS", ENV_ERROR);
-		return (error_new_int("env", "", MANY_ARG_ERR_MSG, ctx->fd[2]));
+		error_new_int("env", "", MANY_ARG_ERR_MSG, ctx->fd[2]);
+		return (0);
 	}
 	env_lst = g_env.env_vars;
 	while (env_lst)
