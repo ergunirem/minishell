@@ -6,7 +6,7 @@
 /*   By: icikrikc <icikrikc@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/05 20:58:19 by icikrikc      #+#    #+#                 */
-/*   Updated: 2021/08/15 11:20:40 by icikrikc      ########   odam.nl         */
+/*   Updated: 2021/08/28 18:05:40 by icikrikc      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ static void	set_quote_mode(char c, char *q_mode)
 **	If arg is $, "$", $$, "$$" etc, it skips the $ char
 **	Traverses until a char that's not in variable name convention
 */
-static int	get_var_name(char *str, int i, int *j)
+static int	get_var_name(char *s, int i, int *j)
 {
-	if (str[i + 1] == '\0' || str[i + 1] == '$' || str[i + 1] == '\"')
+	if (s[i + 1] == '\0' || s[i + 1] == '$' || s[i + 1] == '\"')
 		return (0);
-	if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
+	if (ft_isalpha(s[i + 1]) || s[i + 1] == '_')
 		(*j)++;
-	if (*j == 1 && !ft_isdigit(str[i + 1]))
+	if (*j == 1 && !ft_isdigit(s[i + 1]))
 		return (0);
 	if (*j == 2)
 	{
-		while (ft_isalnum(str[i + *j]) || str[i + *j] == '_')
+		while (ft_isalnum(s[i + *j]) || s[i + *j] == '_')
 		{
 			(*j)++;
 		}
@@ -56,7 +56,7 @@ static int	get_var_name(char *str, int i, int *j)
 **	If VAR is non-existent, removes it from string
 **	Else, appends the value to the string
 */
-static int	expand(char **str, int i)
+static int	expand(char **str, int i, char q_mode)
 {
 	char		*expanded;
 	t_pair_lst	*env_var;
@@ -72,7 +72,7 @@ static int	expand(char **str, int i)
 		var_name = ft_substr(*str, i + 1, j - 1);
 	env_var = find_env_var(g_env.env_vars, var_name);
 	free(var_name);
-	if (!env_var)
+	if (!env_var || !env_var->value)
 	{
 		if (j == 1)
 			j++;
@@ -92,28 +92,29 @@ static int	expand(char **str, int i)
 */
 char	*remove_quotes_and_expand(char *arg)
 {
-	char			*str;
-	int				offset;
-	char			q_mode;
+	char			*s;
+	int				i;
+	char			q;
 
-	str = ft_strdup(arg);
-	if (!str)
+	s = ft_strdup(arg);
+	if (!s)
 		return (NULL);
-	q_mode = 0;
-	offset = 0;
-	while (str[offset])
+	q = 0;
+	i = 0;
+	while (s[i])
 	{
-		set_quote_mode(str[offset], &q_mode);
-		if ((str[offset] == '\"' && q_mode != '\'')
-			|| (str[offset] == '\'' && q_mode != '\"'))
+		set_quote_mode(s[i], &q);
+		if ((s[i] == '\"' && q != '\'') || (s[i] == '\'' && q != '\"'))
 		{
-			ft_memmove(&str[offset], &str[offset + 1], ft_strlen(str) - offset);
-			offset--;
+			ft_memmove(&s[i], &s[i + 1], ft_strlen(s) - i);
+			i--;
 		}
-		else if (str[offset] == '$' && q_mode != '\'')
-			offset = expand(&str, offset) - 1;
-		offset++;
+		else if (s[i] == '$' && q != '\'')
+			i = expand(&s, i, q) - 1;
+		i++;
+		if (i < 0)
+			break ;
 	}
 	free(arg);
-	return (str);
+	return (s);
 }
